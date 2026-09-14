@@ -242,3 +242,6 @@ main>.anchorBand{margin:0;padding:24px 32px;background:var(--surface);border-top
 .holdPhotoCaption small{display:block;margin-top:16px;font-size:9px;color:#d4dce1}
 @media(max-width:767px){.assumptionStories .pauseStory{min-height:500px}.holdPhotoCaption{padding:65px 25px 24px}.pauseStory .holdPhoto{object-position:65% center}}
 .pauseStory .holdPhoto{z-index:0}.pauseStory:after{z-index:1}.pauseStory .storyCopy,.holdPhotoCaption{position:relative;z-index:2}
+
+.assumptionStories .pauseStory{min-height:570px}.pauseStory .holdPhoto{top:auto!important;height:360px!important;object-fit:cover;object-position:center top}.pauseStory:after{background:linear-gradient(180deg,#182638 0%,#182638 34%,transparent 43%,transparent 75%,rgba(10,20,30,.75) 100%)}.holdPhotoCaption{padding-top:240px}.holdPhotoCaption strong{font-size:18px;max-width:240px}.holdPhotoCaption>span{display:none}
+@media(max-width:767px){.assumptionStories .pauseStory{min-height:610px}.pauseStory .holdPhoto{height:330px!important;object-position:68% top}.pauseStory:after{background:linear-gradient(180deg,#182638 0%,#182638 40%,transparent 48%,transparent 78%,rgba(10,20,30,.8) 100%)}.holdPhotoCaption{padding-top:245px}.holdPhotoCaption strong{font-size:18px;max-width:210px}}

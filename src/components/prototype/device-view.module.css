@@ -12,3 +12,5 @@
 
 /* SVG image and outline transform together; no viewport-relative detection box. */
 .photo{display:block;width:100%;height:100%;background:none}.detectionOutline{fill:none;stroke:#e832c3;stroke-width:2;stroke-linejoin:round;pointer-events:none}.detectionOutline path{vector-effect:non-scaling-stroke}
+
+.noFinding{padding:28px 0;margin:24px 0;color:#535b55;border-bottom:1px solid #dde1da}.noFinding h3{font-size:18px;margin:14px 0 8px}.noFinding p{font-size:13px;margin-bottom:10px}.noFinding small{font-size:12px;line-height:1.5;display:block}

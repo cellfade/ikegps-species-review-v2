@@ -13,9 +13,9 @@ import styles from "./office-view.module.css";
 import { IdentificationHelp } from "./identification-help";
 
 type Instruction = "hold" | "continue" | "request";
-type Scene = "capture" | "analysis" | "finding" | "hold" | "request" | "sent" | "stopped" | "continue" | "offline";
-type Props = { analysisReady?: boolean; evidenceDelivered?: boolean; initialScene?: Scene; photoCount?: number; onInstruction?: (instruction: Instruction | "stopped", reason: string) => void };
-export function OfficeView({ onInstruction, photoCount = 1, initialScene = "finding", analysisReady, evidenceDelivered }: Props) {
+type Scene = "unflagged" | "capture" | "analysis" | "finding" | "hold" | "request" | "sent" | "stopped" | "continue" | "offline";
+type Props = { noFinding?: boolean; analysisReady?: boolean; evidenceDelivered?: boolean; initialScene?: Scene; photoCount?: number; onInstruction?: (instruction: Instruction | "stopped", reason: string) => void };
+export function OfficeView({ noFinding = false, onInstruction, photoCount = 1, initialScene = "finding", analysisReady, evidenceDelivered }: Props) {
   const pendingAnalysis = analysisReady === undefined ? initialScene === "analysis" || initialScene === "capture" || initialScene === "offline" : !analysisReady;
   const photoAvailable = evidenceDelivered ?? (initialScene !== "capture" && initialScene !== "offline");
   const reviewEntryRef = useRef<HTMLButtonElement>(null);
@@ -106,6 +106,7 @@ export function OfficeView({ onInstruction, photoCount = 1, initialScene = "find
     const url = URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8;"})); const link = document.createElement("a"); link.href=url; link.download="cedar-ridge-compliance-024.csv"; link.click(); URL.revokeObjectURL(url);
     setDialog(null); setFeedback("One compliance record exported. External procedure remains outstanding.");
   };
+  if (noFinding) return <section className={styles.office} aria-label="Office result without a flag"><div className={styles.navigation}>IKE Office Pro · Pole 024</div><div style={{padding:32}}><h2>Nothing flagged</h2><p>Analysis complete. No review notification was created.</p><p>No work authorization is inferred from this result.</p></div><svg viewBox="0 0 1515 782" role="img" aria-label="Office Pro reference workspace without a species review notification"><image href="/references/office-pro-training-frame.png" width="1515" height="782"/></svg></section>;
   return <section className={styles.office} aria-label="IKE Office Pro review prototype">
     <nav className={styles.navigation} aria-label="Office sections"><Button variant="ghost" aria-pressed={view === "review"} onClick={() => setView("review")}><FolderOpen data-icon="inline-start"/>Office workspace</Button><Button variant="ghost" aria-pressed={view === "compliance"} onClick={() => setView("compliance")}><ListChecks data-icon="inline-start"/>Compliance</Button><span>Office Pro layout · Proposed species extension</span></nav>
     {view === "review" && <div className={styles.poleSwitcher}><span>WO-1084</span><div role="group" aria-label="Select a demonstration pole">{["023","024","025"].map(pole=><Button key={pole} variant="ghost" size="sm" aria-pressed={workspacePole===pole} onClick={()=>setWorkspacePole(pole)}>Pole {pole}</Button>)}</div><small>{workspacePole === "024" ? "Evidence review available" : "Awaiting capture"}</small></div>}

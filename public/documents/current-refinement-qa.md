@@ -13,7 +13,7 @@ The submitted two-page Part 1 document remains unchanged. The landing retains it
 - Additional delivered evidence invalidates the old assessment regardless of the current instruction. Work status remains unchanged until an explicit decision.
 - Two illustrative photo views are available when delivered, with zoom, pan, fit, and image-specific annotations. The original outlines are never applied to the alternate view.
 - Neighboring demo poles retain independent empty states. Returning to Pole 024 preserves its review.
-- Seven state regression tests pass. ESLint, TypeScript, and production build passed in the closing integration checks; final deployment is verified separately.
+- Eight state regression tests pass. ESLint, TypeScript, and production build passed in the closing integration checks; final deployment is verified separately.
 
 ## Visual review
 Desktop modal contents fit, including inline assessment and history. Mobile actions wrap, and assessment, help, and history remain reachable by internal scroll. All five journey labels remain visible, with no page-level horizontal overflow observed. The screenshot-based Office workspace intentionally scrolls horizontally on narrow screens. Landing questions, assumptions, design grid, and prototype were inspected at desktop and mobile sizes.

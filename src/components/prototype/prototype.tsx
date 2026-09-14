@@ -8,6 +8,7 @@ import { OfficeView } from './office-view';
 import { Button } from '@/components/ui/button';
 import styles from './prototype.module.css';
 const scenes:{id:Scene,label:string,description:string}[]=[
+{id:'unflagged',label:'Nothing flagged',description:'Completed analysis produced no flag. This is not a safety clearance. Normal field checks remain necessary; moving to the next pole does not release any hold.'},
 {id:'capture',label:'Capture a pole',description:'The existing capture workflow. A concern starts with the photo the crew already takes.'},
 {id:'analysis',label:'Analysis pending',description:'The photo is saved but analysis is not complete. Await review before work on this pole under our proposed pre-work assumption.'},
 {id:'finding',label:'A possible concern',description:'AI suggests an identity. The crew flags the concern without needing to identify the bird.'},
@@ -41,7 +42,7 @@ return <div className={styles.shell}>
 <div id="panel-field" role="tabpanel" aria-labelledby="role-field" hidden={surface!=='field'} tabIndex={0}>
 <main className={styles.stage}><section className={styles.deviceStage} aria-label="Interactive IKE device"><DeviceView scene={scene} poleNumber={pole} photoCount={photoCount} feedback={message} onCapture={()=>dispatch({type:'capture'})} onFlag={()=>dispatch({type:'flag'})} onAddPhoto={()=>dispatch({type:'add-photo'})} onNextPole={()=>dispatch({type:'next-pole'})} onUnable={()=>dispatch({type:'unable'})}/><p className={styles.deviceCaption}>IKE Field · Android capture concept</p></section></main>
 </div>
-<div className={styles.officeStage} id="panel-office" role="tabpanel" aria-labelledby="role-office" hidden={surface!=='office'} tabIndex={0}><OfficeView key={resetKey} initialScene={selectedDemoScene} analysisReady={analysisReady024} evidenceDelivered={evidenceDelivered024} photoCount={photoCount024} onInstruction={(instruction,reason)=>dispatch({type:'instruction-received',instruction,reason})}/></div>
+<div className={styles.officeStage} id="panel-office" role="tabpanel" aria-labelledby="role-office" hidden={surface!=='office'} tabIndex={0}><OfficeView noFinding={selectedDemoScene==='unflagged'} key={resetKey} initialScene={selectedDemoScene} analysisReady={analysisReady024} evidenceDelivered={evidenceDelivered024} photoCount={photoCount024} onInstruction={(instruction,reason)=>dispatch({type:'instruction-received',instruction,reason})}/></div>
 <footer className={styles.journeyBar}>
 <div className={styles.journeyInner}>
 

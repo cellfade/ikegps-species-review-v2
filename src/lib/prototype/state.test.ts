@@ -54,3 +54,31 @@ test('nothing flagged is a result, not a hold release',()=>{
   assert.equal(next.instruction,'await-review');
   assert.match(next.message,/Normal field checks/);
 });
+
+
+test('unable-to-collect update reaches office once while preserving hold and evidence',()=>{
+  const requested=seedScene('request');
+  const failed=journeyReducer(requested,{type:'unable'});
+  assert.equal(failed.instruction,'hold');
+  assert.equal(failed.evidenceFailureCount024,1);
+  assert.equal(failed.queuedEvidenceFailure024,false);
+  assert.equal(failed.photoCount024,requested.photoCount024);
+  assert.match(failed.message,/Office received/);
+  assert.equal(journeyReducer(failed,{type:'deliver-queued-failure'}),failed);
+});
+
+test('offline inability stays queued until explicit delivery without uploading photos or releasing hold',()=>{
+  const failed=journeyReducer(seedScene('offline'),{type:'unable'});
+  assert.equal(failed.scene,'offline');
+  assert.equal(failed.instruction,'hold');
+  assert.equal(failed.evidenceFailureCount024,0);
+  assert.equal(failed.queuedEvidenceFailure024,true);
+  assert.match(failed.message,/office delivery pending/);
+  const delivered=journeyReducer(failed,{type:'deliver-queued-failure'});
+  assert.equal(delivered.evidenceFailureCount024,1);
+  assert.equal(delivered.queuedEvidenceFailure024,false);
+  assert.equal(delivered.instruction,'hold');
+  assert.equal(delivered.photoCount024,0);
+  assert.equal(delivered.evidenceDelivered024,false);
+  assert.equal(journeyReducer(delivered,{type:'deliver-queued-failure'}),delivered);
+});

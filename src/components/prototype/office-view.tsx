@@ -14,8 +14,8 @@ import { IdentificationHelp } from "./identification-help";
 
 type Instruction = "hold" | "continue" | "request";
 type Scene = "unflagged" | "capture" | "analysis" | "finding" | "hold" | "request" | "sent" | "stopped" | "continue" | "offline";
-type Props = { noFinding?: boolean; analysisReady?: boolean; evidenceDelivered?: boolean; initialScene?: Scene; photoCount?: number; onInstruction?: (instruction: Instruction | "stopped", reason: string) => void };
-export function OfficeView({ noFinding = false, onInstruction, photoCount = 1, initialScene = "finding", analysisReady, evidenceDelivered }: Props) {
+type Props = { evidenceFailureCount?: number; noFinding?: boolean; analysisReady?: boolean; evidenceDelivered?: boolean; initialScene?: Scene; photoCount?: number; onInstruction?: (instruction: Instruction | "stopped", reason: string) => void };
+export function OfficeView({ evidenceFailureCount = 0, noFinding = false, onInstruction, photoCount = 1, initialScene = "finding", analysisReady, evidenceDelivered }: Props) {
   const pendingAnalysis = analysisReady === undefined ? initialScene === "analysis" || initialScene === "capture" || initialScene === "offline" : !analysisReady;
   const photoAvailable = evidenceDelivered ?? (initialScene !== "capture" && initialScene !== "offline");
   const reviewEntryRef = useRef<HTMLButtonElement>(null);
@@ -60,18 +60,26 @@ export function OfficeView({ noFinding = false, onInstruction, photoCount = 1, i
   const changeZoom = (value:number) => {const scale=Math.max(1,Math.min(4,value));setZoom(scale);setPan(constrainPan(pan.x,pan.y,scale));};
   const fitPhoto = () => {setZoom(1);setPan({x:0,y:0});};
   const [reviewed, setReviewed] = useState(initialScene === "continue" || initialScene === "stopped");
+  const [evidenceUnavailable, setEvidenceUnavailable] = useState(false);
   const [observedPhotoCount, setObservedPhotoCount] = useState(photoCount);
   const [newEvidence, setNewEvidence] = useState(initialScene === "sent");
   // Reconcile only a changed delivered count. This guarded render update avoids an effect cascade.
   if (observedPhotoCount !== photoCount) {
     setObservedPhotoCount(photoCount);
     if (photoCount > observedPhotoCount && photoAvailable) {
-      setNewEvidence(true);
+      setNewEvidence(true);setEvidenceUnavailable(false);
       setNotification(true);
       setFeedback("");
       setReviewed(false);
       setHistory(items => [`Additional evidence received · ${photoCount} photos attached · Re-review needed; work instruction unchanged`, ...items]);
     }
+  }
+  const [observedFailureCount, setObservedFailureCount] = useState(evidenceFailureCount);
+  if (evidenceFailureCount > observedFailureCount) {
+    setObservedFailureCount(evidenceFailureCount);
+    setEvidenceUnavailable(true);setNotification(true);setNewEvidence(false);setReviewed(false);setInstruction("hold");
+    setFeedback("Crew could not collect the requested photos. Review the next step; Pole 024 remains on hold.");
+    setHistory(items=>["Crew update received · Requested photos could not be collected · Pole 024 remains on hold",...items]);
   }
   const [assessmentReason, setAssessmentReason] = useState("");
   const [savedAssessmentReason, setSavedAssessmentReason] = useState("");
@@ -92,7 +100,7 @@ export function OfficeView({ noFinding = false, onInstruction, photoCount = 1, i
       if (dialog === "continue" && (!reviewed || assessmentDirty || assessment === "Not yet verified" || nesting !== "No nesting observed")) { setError("Review the evidence and record a no-nesting assessment before authorizing continuation."); return; }
       if (dialog === "confirm" && (!reviewed || assessmentDirty || nesting !== "Nesting observed")) { setError("Record a reviewed nesting observation before confirming work stoppage."); return; }
       const nextInstruction: Instruction = dialog === "confirm" ? "hold" : dialog === "hold" && requestEvidence ? "request" : dialog;
-      setConfirmedStoppage(dialog === "confirm");
+      setEvidenceUnavailable(false);setConfirmedStoppage(dialog === "confirm");
       setNewEvidence(false); setInstruction(nextInstruction); setDelivery("Sent · Awaiting crew receipt");
       const label = dialog === "confirm" ? "Work stoppage confirmed · Nesting observed" : dialog === "continue" ? "Hold released" : nextInstruction === "request" ? "More photos requested · Hold maintained" : "Hold maintained";
       setHistory(h => [`${label} by Alex Morgan · ${reason}`, ...h]);
@@ -119,12 +127,12 @@ export function OfficeView({ noFinding = false, onInstruction, photoCount = 1, i
     </main> : <div className={styles.literalWorkspace}>
       <svg viewBox="0 0 1515 782" role="img" aria-label="Office Pro training reference with proposed Pole 024 photo overlay"><image href="/references/office-pro-training-frame.png" width="1515" height="782"/><rect x="475" y="32" width="563" height="750" fill="#e8ede7"/>{workspacePole === "024" && photoAvailable ? <svg x="475" y="32" width="563" height="750" viewBox="0 0 1024 1536" preserveAspectRatio="xMidYMid meet"><image href={selectedPhoto === "detail" ? "/assets/pole-nest-detail-illustrative.png" : "/assets/pole-nest.png"} width="1024" height="1536"/>{!pendingAnalysis && selectedPhoto === "wide" && <g className={styles.detectionOutline}><path d="M397 494 L417 468 L429 451 L437 437 L450 426 L461 419 L475 417 L484 423 L487 430 L479 433 L476 447 L467 461 L457 473 L438 481 L425 487 L416 496 Z"/><path d="M379 493 L398 479 L429 461 L452 456 L482 454 L502 440 L520 447 L537 457 L563 450 L587 458 L596 479 L590 506 L604 529 L591 548 L591 574 L578 589 L573 611 L558 593 L534 583 L511 585 L492 569 L468 557 L453 536 L433 519 L408 516 Z"/><path d="M500 461H670"/><rect x="667" y="433" width="295" height="54" fill="#fffdf4" stroke="#e832c3"/><text x="681" y="466" fill="#70405f" stroke="none" fontSize="23">Possible nest · Unverified</text></g>}</svg> : <text x="756" y="370" textAnchor="middle" fill="#788571" fontSize="18">Pole {workspacePole} · Awaiting capture</text>}
       <rect x="17" y="78" width="234" height="22" fill="#f9faf5"/><text x="28" y="94" fontSize="13" fill="#45533e">{workspacePole}</text><rect x="1280" y="33" width="90" height="21" fill="#f3f7ef"/><text x="1295" y="48" fontSize="13" fill="#45533e">{workspacePole}</text><rect x="1223" y="289" width="70" height="23" fill="#f9fcf5"/><text x="1233" y="305" fontSize="13" fill="#68735e">{workspacePole}</text></svg>
-      <button ref={reviewEntryRef} className={styles.literalNotification} onClick={openReview}><Bell size={14}/><span>Pole 024 · {pendingAnalysis ? "Analysis pending" : newEvidence ? "New evidence" : notification ? "Review needed" : "Species review"}</span><ArrowUpRight size={13}/></button>
+      <button ref={reviewEntryRef} className={styles.literalNotification} onClick={openReview}><Bell size={14}/><span>Pole 024 · {evidenceUnavailable ? "Photos unavailable" : pendingAnalysis ? "Analysis pending" : newEvidence ? "New evidence" : notification ? "Review needed" : "Species review"}</span><ArrowUpRight size={13}/></button>
       {workspacePole === "024" && photoAvailable && !pendingAnalysis && <button className={styles.literalPhotoBadge} onClick={openReview}><Bell size={14}/><span><strong>Possible bird · Possible nest</strong><small>{reviewed ? "Assessment recorded" : "AI suggestion · Review needed"}</small></span><ArrowUpRight size={13}/></button>}
     </div>}
     <Dialog open={reviewOpen} onOpenChange={setReviewOpen}><DialogContent className={styles.reviewModal} onCloseAutoFocus={event=>{event.preventDefault();reviewEntryRef.current?.focus();}}><DialogHeader className={styles.modalHeader}><DialogTitle>Species review</DialogTitle><DialogDescription>Review the evidence and record a work instruction.</DialogDescription></DialogHeader>      <div className={styles.review}>
         <div className={styles.poleHeading}><div><p className={styles.eyebrow}>CEDAR RIDGE / WO-1084</p><h1>Pole 024</h1></div><Badge variant="outline" className={instruction === "continue" ? styles.clearBadge : styles.holdBadge}>{instruction === "continue" ? "Hold released" : confirmedStoppage ? "Work stoppage confirmed" : "Work on hold"}</Badge></div>
-        <div className={styles.instructionBar}><div><strong>{newEvidence ? (reviewed ? "Evidence reviewed · Work decision needed" : "New evidence ready for review") : confirmedStoppage ? "Work stoppage confirmed · Nesting observed" : instruction === "request" ? "More evidence needed" : instruction === "continue" ? "Hold released" : "Review needed"}</strong>{instruction === "continue" && <small>Authorization recorded by Alex Morgan</small>}</div><div className={styles.actions}><Button variant="outline" onClick={() => begin("hold")}><Pause data-icon="inline-start"/>Keep hold</Button><Button disabled={pendingAnalysis} onClick={() => begin("continue")}>Release hold <ChevronRight data-icon="inline-end"/></Button><Button variant="outline" disabled={pendingAnalysis} onClick={() => begin("confirm")}>Confirm work stoppage</Button></div></div>
+        <div className={styles.instructionBar}><div><strong>{evidenceUnavailable ? "Requested photos unavailable · Review next step" : newEvidence ? (reviewed ? "Evidence reviewed · Work decision needed" : "New evidence ready for review") : confirmedStoppage ? "Work stoppage confirmed · Nesting observed" : instruction === "request" ? "More evidence needed" : instruction === "continue" ? "Hold released" : "Review needed"}</strong>{instruction === "continue" && <small>Authorization recorded by Alex Morgan</small>}</div><div className={styles.actions}><Button variant="outline" onClick={() => begin("hold")}><Pause data-icon="inline-start"/>Keep hold</Button><Button disabled={pendingAnalysis} onClick={() => begin("continue")}>Release hold <ChevronRight data-icon="inline-end"/></Button><Button variant="outline" disabled={pendingAnalysis} onClick={() => begin("confirm")}>Confirm work stoppage</Button></div></div>
         <div className={styles.evidenceGrid}><div className={styles.evidence}>
           {photoAvailable && <div className={styles.photoRail} aria-label="Evidence photographs"><button aria-pressed={selectedPhoto === "wide"} onClick={()=>{setSelectedPhoto("wide");fitPhoto();}}><svg viewBox="0 0 1024 1536" aria-hidden="true"><image href="/assets/pole-nest.png" width="1024" height="1536"/></svg><span>Pole view</span></button>{photoCount>=2 && <button aria-pressed={selectedPhoto === "detail"} onClick={()=>{setSelectedPhoto("detail");fitPhoto();}}><svg viewBox="0 0 1024 1536" aria-hidden="true"><image href="/assets/pole-nest-detail-illustrative.png" width="1024" height="1536"/></svg><span>Detail view</span></button>}{photoCount>2 && <small>Two illustrative views available</small>}</div>}
           <div className={styles.photoHeader}><span><Camera/> Evidence · {photoAvailable ? photoCount : 0} photo{photoCount === 1 ? "" : "s"}</span><div className={styles.viewerControls}><Button disabled={!photoAvailable || zoom<=1} size="icon-sm" variant="ghost" aria-label="Zoom out" onClick={()=>changeZoom(zoom-.5)}><ZoomOut/></Button><output aria-label="Zoom level">{Math.round(zoom*100)}%</output><Button disabled={!photoAvailable || zoom>=4} size="icon-sm" variant="ghost" aria-label="Zoom in" onClick={()=>changeZoom(zoom+.5)}><ZoomIn/></Button><Button disabled={!photoAvailable} size="icon-sm" variant="ghost" aria-label="Fit entire photo" onClick={fitPhoto}><Maximize2/></Button><Button disabled={!photoAvailable || pendingAnalysis || selectedPhoto === "detail"} size="icon-sm" variant="ghost" aria-label={markings ? "Hide AI markings" : "Show AI markings"} aria-pressed={markings} onClick={()=>setMarkings(!markings)}>{markings?<Eye/>:<EyeOff/>}</Button></div></div>

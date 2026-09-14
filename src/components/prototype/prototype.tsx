@@ -31,7 +31,7 @@ const [surface,setSurface]=useState<'field'|'office'>('field');
 const [{scene,pole,message,photoCount,photoCount024,analysisReady024,evidenceDelivered024},dispatch]=useReducer(journeyReducer,undefined,()=>seedScene());
 const selectScene=(next:Scene)=>{dispatch({type:'scene',scene:next});setSelectedDemoScene(next);setResetKey(n=>n+1);};
 const current=scenes.find(x=>x.id===scene)!;
-const activeStep=scene==='continue'?4:scene==='stopped'?3:['request','sent'].includes(scene)?2:['hold','offline'].includes(scene)?1:0;
+const activeStep=scene==='continue'?4:scene==='stopped'?3:scene==='request'?2:['finding','hold','sent'].includes(scene)?1:0;
 return <div className={styles.shell}>
 <div className={styles.toolbar}>
 <Link className={styles.backLink} href="/" target="_top" aria-label="Back to case study">← Case study</Link>

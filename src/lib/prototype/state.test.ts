@@ -17,3 +17,21 @@ test('next pole starts with its own evidence and no inherited clearance',()=>{
   const next=journeyReducer(seedScene('continue'),{type:'next-pole'});
   assert.equal(next.pole,'025');assert.equal(next.photoCount,0);assert.equal(next.instruction,'await-review');
 });
+
+test('offline captures stay local and do not enter office evidence',()=>{
+  const offline=journeyReducer(seedScene('offline'),{type:'add-photo'});
+  assert.equal(offline.photoCount,2);
+  assert.equal(offline.localPhotoCount024,2);
+  assert.equal(offline.photoCount024,0);
+  const next=journeyReducer(offline,{type:'next-pole'});
+  const returned=journeyReducer(next,{type:'instruction-received',instruction:'hold',reason:'Review pending'});
+  assert.equal(returned.photoCount,2);
+  assert.equal(returned.photoCount024,0);
+});
+
+test('next-pole checkpoint cannot submit an unsupported second concern',()=>{
+  const next=journeyReducer(seedScene('hold'),{type:'next-pole'});
+  for(const type of ['capture','flag','add-photo','next-pole'] as const){
+    assert.equal(journeyReducer(next,{type}),next);
+  }
+});

@@ -9,3 +9,6 @@
 .addPhoto{min-height:36px;border:0;background:transparent;color:#98500f;font:inherit;font-size:12px;display:flex;align-items:center;gap:3px;cursor:pointer;padding:0 3px}.addPhoto:hover{background:#fff3e6}.addPhoto:focus-visible{outline:2px solid #315dba;outline-offset:2px;border-radius:2px}
 
 .feedback{display:block;font-size:11px;color:#465f50;line-height:1.35;padding:5px 14px;background:#f3f8f4}.finding .feedback{padding:3px 0 8px;background:transparent}
+
+/* SVG image and outline transform together; no viewport-relative detection box. */
+.photo{display:block;width:100%;height:100%;background:none}.detectionOutline{fill:none;stroke:#e832c3;stroke-width:2;stroke-linejoin:round;pointer-events:none}.detectionOutline path{vector-effect:non-scaling-stroke}

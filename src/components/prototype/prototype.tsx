@@ -2,7 +2,7 @@
 import { useReducer, useState } from 'react';
 import { journeyReducer, seedScene, type Scene } from '@/lib/prototype/state';
 import Link from 'next/link';
-import { ArrowRight, RotateCcw, Smartphone, Monitor, ChevronDown } from 'lucide-react';
+import { RotateCcw, Smartphone, Monitor, ChevronDown } from 'lucide-react';
 import { DeviceView } from './device-view';
 import { OfficeView } from './office-view';
 import { Button } from '@/components/ui/button';
@@ -16,13 +16,36 @@ const scenes:{id:Scene,label:string,description:string}[]=[
 {id:'sent',label:'New evidence delivered',description:'Additional photos join the same concern. The hold remains while the office reviews them.'},
 {id:'continue',label:'Decision received',description:'The supervisor has resolved a false alarm and recorded a reason to continue work.'},
 {id:'offline',label:'Connection unavailable',description:'The concern is saved on the device. The pole remains held while delivery is pending.'}];
-export function Prototype(){const [resetKey,setResetKey]=useState(0);const [surface,setSurface]=useState<'field'|'office'>('field');const [{scene,pole,message,photoCount,photoCount024},dispatch]=useReducer(journeyReducer,undefined,()=>seedScene());
+const journeySteps: { label: string; scene: Scene; surface: 'field' | 'office' }[] = [
+  { label: 'Capture', scene: 'capture', surface: 'field' },
+  { label: 'Review', scene: 'hold', surface: 'office' },
+  { label: 'More evidence', scene: 'request', surface: 'field' },
+  { label: 'Decision', scene: 'continue', surface: 'field' },
+];
+export function Prototype(){
+const [resetKey,setResetKey]=useState(0);
+const [selectedDemoScene,setSelectedDemoScene]=useState<Scene>('finding');
+const [surface,setSurface]=useState<'field'|'office'>('field');
+const [{scene,pole,message,photoCount,photoCount024,analysisReady024,evidenceDelivered024},dispatch]=useReducer(journeyReducer,undefined,()=>seedScene());
+const selectScene=(next:Scene)=>{dispatch({type:'scene',scene:next});setSelectedDemoScene(next);setResetKey(n=>n+1);};
 const current=scenes.find(x=>x.id===scene)!;
+const activeStep=scene==='continue'?3:['request','sent'].includes(scene)?2:['hold','offline'].includes(scene)?1:0;
 return <div className={styles.shell}>
-<header className={styles.header}><Link className={styles.brand} href="/prototype"><span className={styles.brandMark}>ike</span><span className={styles.productName}>Endangered species identification</span></Link><span className={styles.concept}>Design exploration · Andrew Miller</span></header>
-<div className={styles.toolbar}><div className={styles.surface}><Smartphone size={17}/><strong>{surface==='field'?'IKE device':'Office Pro'}</strong><span>{surface==='field'?'Field capture':'Supervisor review'}</span></div><div className={styles.toolbarActions}><Button variant="ghost" onClick={()=>{dispatch({type:'reset'});setResetKey(n=>n+1)}}><RotateCcw data-icon="inline-start"/>Reset</Button><Button variant="outline" onClick={()=>setSurface(surface==='field'?'office':'field')}><Monitor data-icon="inline-start"/>{surface==='field'?'Office review':'Back to device'}<ArrowRight data-icon="inline-end"/></Button></div></div>
-<div hidden={surface!=='field'}><main className={styles.stage}>
-<aside className={styles.story}><span className={styles.eyebrow}>01 / FIELD TOUCHPOINT</span><h1>A concern.<br/>A clear next step.</h1><p className={styles.intro}>Keep the crew focused on capture. Put the assessment with the office.</p><div className={styles.sceneList} aria-label="Demonstration scenes">{scenes.map((item,i)=><button key={item.id} onClick={()=>dispatch({type:'scene',scene:item.id})} aria-pressed={scene===item.id} className={scene===item.id?styles.activeScene:styles.scene}><span>{String(i+1).padStart(2,'0')}</span>{item.label}{scene===item.id&&<ArrowRight size={16}/>}</button>)}</div><p className={styles.demoNote}>Selectable moments in one journey. Photos and AI suggestions are illustrative; time and delivery states are simulated.</p></aside>
-<section className={styles.deviceStage} aria-label="Interactive IKE device"><div className={styles.deviceHeading}><span>Cedar Ridge / Work order 1084</span><strong>Pole {pole}</strong></div><DeviceView scene={scene} poleNumber={pole} photoCount={photoCount} feedback={message} onCapture={()=>dispatch({type:'capture'})} onFlag={()=>dispatch({type:'flag'})} onAddPhoto={()=>dispatch({type:'add-photo'})} onNextPole={()=>dispatch({type:'next-pole'})} onUnable={()=>dispatch({type:'unable'})}/><p className={styles.deviceCaption}>IKE Field · Android capture concept</p></section>
-<aside className={styles.context}><span className={styles.eyebrow}>THIS MOMENT</span><h2>{current.label}</h2><p>{current.description}</p><div className={styles.rule}/><h3>One pole. One concern.</h3><p>Evidence and office requests stay attached to the pole. A new photo never silently releases the hold.</p><details><summary>What is proposed <ChevronDown size={15}/></summary><p>The concern UI extends the published IKE capture pattern. The surrounding device controls are simplified for this demonstration.</p></details><div role="status" className={styles.feedback}>{message}</div></aside>
-</main></div><div hidden={surface!=='office'}><OfficeView key={resetKey} photoCount={photoCount024} onInstruction={(instruction,reason)=>dispatch({type:'instruction-received',instruction,reason})}/></div><footer className={styles.footer}><span>Capture → Review → Record</span><Link href="/">Back to case study</Link></footer></div>}
+<header className={styles.header}><Link className={styles.brand} href="/"><span className={styles.brandMark}>ike</span><span className={styles.productName}>Endangered species identification</span></Link><Link className={styles.backLink} href="/">Case study</Link></header>
+<div className={styles.toolbar}>
+<div className={styles.roleTabs} role="tablist" aria-label="View perspective">{(['field','office'] as const).map(role=><button key={role} id={`role-${role}`} role="tab" aria-selected={surface===role} aria-controls={`panel-${role}`} tabIndex={surface===role?0:-1} onClick={()=>setSurface(role)} onKeyDown={event=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(event.key)){event.preventDefault();const target=event.key==='Home'?'field':event.key==='End'?'office':role==='field'?'office':'field';setSurface(target);document.getElementById(`role-${target}`)?.focus();}}}>{role==='field'?<Smartphone size={16} aria-hidden="true"/>:<Monitor size={16} aria-hidden="true"/>}{role==='field'?'Field crew':'Office supervisor'}</button>)}</div>
+<Button className={styles.reset} variant="ghost" onClick={()=>{dispatch({type:'reset'});setSelectedDemoScene('finding');setResetKey(n=>n+1)}}><RotateCcw data-icon="inline-start" aria-hidden="true"/>Reset</Button>
+</div>
+<div id="panel-field" role="tabpanel" aria-labelledby="role-field" hidden={surface!=='field'} tabIndex={0}>
+<main className={styles.stage}><section className={styles.deviceStage} aria-label="Interactive IKE device"><div className={styles.deviceHeading}><span>Cedar Ridge / Work order 1084</span><strong>Pole {pole}</strong></div><DeviceView scene={scene} poleNumber={pole} photoCount={photoCount} feedback={message} onCapture={()=>dispatch({type:'capture'})} onFlag={()=>dispatch({type:'flag'})} onAddPhoto={()=>dispatch({type:'add-photo'})} onNextPole={()=>dispatch({type:'next-pole'})} onUnable={()=>dispatch({type:'unable'})}/><p className={styles.deviceCaption}>IKE Field · Android capture concept</p></section></main>
+</div>
+<div id="panel-office" role="tabpanel" aria-labelledby="role-office" hidden={surface!=='office'} tabIndex={0}><OfficeView key={resetKey} initialScene={selectedDemoScene} analysisReady={analysisReady024} evidenceDelivered={evidenceDelivered024} photoCount={photoCount024} onInstruction={(instruction,reason)=>dispatch({type:'instruction-received',instruction,reason})}/></div>
+<footer className={styles.journeyBar}>
+<div className={styles.journeyInner}>
+<div className={styles.journeyTitle}><strong>Explore the journey</strong><span>Demo navigation, not work progress</span></div>
+<nav className={styles.steps} aria-label="Journey moments">{journeySteps.map((step,index)=><button key={step.label} aria-current={activeStep===index?'step':undefined} onClick={()=>{selectScene(step.scene);setSurface(step.surface);}}><span className={styles.stepTrack}/><span>{step.label}</span></button>)}</nav>
+<label className={styles.scenarioLabel}>Scenario<select value={scene} onChange={event=>selectScene(event.target.value as Scene)}>{scenes.map(item=><option key={item.id} value={item.id}>{item.label}</option>)}</select></label>
+</div>
+<details className={styles.context}><summary>About this moment <ChevronDown size={14} aria-hidden="true"/></summary><div><strong>{current.label}</strong><p>{current.description}</p><p>Photos, analysis, timing, and delivery are simulated. Selecting a journey moment or scenario loads an example; switching roles preserves the current review. Scenario selection resets both perspectives.</p></div></details>
+</footer>
+</div>}

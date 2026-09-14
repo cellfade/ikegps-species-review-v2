@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, Camera, ClipboardCheck, ImageIcon, MoveUpRight, Search } from "lucide-react";
 import styles from "./landing-page.module.css";
 
@@ -77,9 +78,15 @@ export function LandingPage() {
           <div><h3>What we need to learn</h3><ul><li>Do crews understand pending analysis and pole-specific instructions?</li><li>Do notifications help supervisors reach a verified decision sooner?</li><li>Can crews obtain additional photos through the existing capture workflow?</li><li>Who approves Audubon sharing, and what data is useful?</li></ul></div>
           <aside><span>Future opportunity</span><h3>Review before dispatch.</h3><p>Explore existing corridor photos during work-order planning, using the same review interface. Image quality and age need validation.</p><p className={styles.small}>Historical evidence is context, not current clearance.</p></aside>
         </div>
-        <details className={styles.supporting}><summary>Research approach and supporting artifacts</summary><p>Test the field instructions with crews, walk through uncertain findings with supervisors, and validate reporting needs with conservation partners. Measure time to review, decision, and instruction receipt against a baseline.</p><p><a href="https://www.figma.com/board/qdbKTuDN054FcmO2aOxauJ/IKE-V2-Concern-record-journey?node-id=3-85" target="_blank" rel="noreferrer">Service blueprint</a> · <a href="https://www.nngroup.com/articles/ten-usability-heuristics/" target="_blank" rel="noreferrer">NN/g usability heuristics</a> · <a href="https://baymard.com/blog/trigger-indicators" target="_blank" rel="noreferrer">Baymard: clear interaction cues</a></p><p>These sources inform the design. The proposed workflow still needs validation.</p></details><div className={styles.handoff}><div><h3>See the decisions in context.</h3><p>Explore the crew and office touchpoints in a clickable concept.</p></div><Link className={styles.primaryLink} href="/prototype">Explore the prototype <MoveUpRight size={18} aria-hidden="true" /></Link></div>
+        <details className={styles.supporting}><summary>Research approach and supporting artifacts</summary><p>Test the field instructions with crews, walk through uncertain findings with supervisors, and validate reporting needs with conservation partners. Measure time to review, decision, and instruction receipt against a baseline.</p><p><a href="https://www.figma.com/board/qdbKTuDN054FcmO2aOxauJ/IKE-V2-Concern-record-journey?node-id=3-85" target="_blank" rel="noreferrer">Service blueprint</a> · <a href="https://www.nngroup.com/articles/ten-usability-heuristics/" target="_blank" rel="noreferrer">NN/g usability heuristics</a> · <a href="https://baymard.com/blog/trigger-indicators" target="_blank" rel="noreferrer">Baymard: clear interaction cues</a></p><p>These sources inform the design. The proposed workflow still needs validation.</p></details><div className={styles.landscapeClose}>
+          <Image className={styles.landscapeImage} src="/assets/v1-closing-corridor-illustrative.png" alt="Illustrative mountain utility corridor with a bird and nest on a pole, reused from the original design concept" fill sizes="100vw" />
+          <div className={styles.landscapeShade} />
+          <div className={styles.closeContent}>
+            <div className={styles.handoff}><div><h3>A clearer call.<br />A crew that knows what’s next.</h3><p>Explore the field finding, office review, and instruction back to the crew.</p></div><Link className={styles.primaryLink} href="/prototype">Explore the prototype <MoveUpRight size={18} aria-hidden="true" /></Link></div>
+            <footer className={styles.footer}><a href="#overview" className={styles.footerBrand}>ikeGPS</a><span>Andrew Miller · Product design<br />Independent design exercise · Illustrative landscape</span><span>Proposed workflows.<br />Simulated AI.</span></footer>
+          </div>
+        </div>
       </section>
     </main>
-    <footer className={styles.footer}><span>Andrew Miller · Product design</span><span>Independent design exercise. Proposed workflows and simulated AI.</span></footer>
   </div>;
 }

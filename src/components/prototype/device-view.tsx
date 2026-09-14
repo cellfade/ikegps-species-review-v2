@@ -18,13 +18,14 @@ export type DeviceViewProps = {
 };
 
 export function DeviceView({ scene, onCapture, onFlag, onAddPhoto, onNextPole, onUnable, poleNumber = "024", photoCount = 1, feedback }: DeviceViewProps) {
-  const camera = scene === "capture" || scene === "finding";
+  const nextPole = poleNumber !== "024";
+  const camera = !nextPole && (scene === "capture" || scene === "finding");
   const title = scene === "analysis" ? "Wait before work on this pole" : scene === "continue" ? "Work may continue" : scene === "offline" ? "Saved on device" : scene === "request" ? "Office requested photos" : scene === "sent" ? "Photos sent to office" : "This pole is on hold";
   return <section className={styles.device} aria-label={`IKE device, pole ${poleNumber}`}>
     <div className={styles.status} aria-hidden="true"><span><Crosshair/><Plus/><Eye/></span><span>{scene === "offline" ? <WifiOff/> : <Wifi/>}<MapPin/><BatteryFull/><b>12:15</b></span></div>
-    {camera ? <div className={styles.camera}>
+    {nextPole ? <div className={styles.form}><header className={styles.formHeader}><div><span>Pole {poleNumber}</span><small>WO-1084 · Cedar Ridge</small></div></header><div className={styles.concern}><h3>Next pole reached</h3><p>The walkthrough continues with Pole 024 in office review.</p><small>Pole 024 keeps its latest work instruction. Capture at the next pole is outside this demonstration.</small></div></div> : camera ? <div className={styles.camera}>
       {/* This is seeded demonstration imagery; no live camera or sensor readings. */}
-      <div className={styles.photo} role="img" aria-label="Demonstration photo of a bird and possible nest on a utility pole"/>
+      <svg className={styles.photo} viewBox="0 0 1024 1536" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Demonstration photo of a bird and possible nest on a utility pole; outlines are illustrative"><image href="/assets/pole-nest.png" width="1024" height="1536"/>{scene === "finding" && <g className={styles.detectionOutline}><path d="M397 494 L417 468 L429 451 L437 437 L450 426 L461 419 L475 417 L484 423 L487 430 L479 433 L476 447 L467 461 L457 473 L438 481 L425 487 L416 496 Z"/><path d="M379 493 L398 479 L429 461 L452 456 L482 454 L502 440 L520 447 L537 457 L563 450 L587 458 L596 479 L590 506 L604 529 L591 548 L591 574 L578 589 L573 611 L558 593 L534 583 L511 585 L492 569 L468 557 L453 536 L433 519 L408 516 Z"/></g>}</svg>
       <div className={styles.cameraContext}>Pole {poleNumber}<small>IKEphoto · Capture preview</small></div>
       <div className={styles.guides} aria-hidden="true"/><div className={styles.reticle} aria-hidden="true"/>
       <div className={styles.adjustment} aria-hidden="true"><Plus/><span/><Minus/></div>

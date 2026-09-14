@@ -28,27 +28,31 @@ const journeySteps: { label: string; scene: Scene; surface: 'field' | 'office' }
 export function Prototype(){
 const [resetKey,setResetKey]=useState(0);
 const [selectedDemoScene,setSelectedDemoScene]=useState<Scene>('finding');
+const [activePole,setActivePole]=useState('024');
+const [secondary,setSecondary]=useState<{scene:Scene;photoCount:number;failureCount:number;message:string}>({scene:'hold',photoCount:1,failureCount:0,message:''});
 const [surface,setSurface]=useState<'field'|'office'>('field');
 const [{scene,pole,message,photoCount,photoCount024,analysisReady024,evidenceDelivered024,evidenceFailureCount024,queuedEvidenceFailure024},dispatch]=useReducer(journeyReducer,undefined,()=>seedScene());
-const selectScene=(next:Scene)=>{dispatch({type:'scene',scene:next});setSelectedDemoScene(next);setResetKey(n=>n+1);};
-const current=scenes.find(x=>x.id===scene)!;
-const activeStep=scene==='continue'?4:scene==='stopped'?3:scene==='request'?2:['finding','hold','sent'].includes(scene)?1:0;
+const resetSecondary=()=>{setActivePole('024');setSecondary({scene:'hold',photoCount:1,failureCount:0,message:''});};
+const selectScene=(next:Scene)=>{resetSecondary();dispatch({type:'scene',scene:next});setSelectedDemoScene(next);setResetKey(n=>n+1);};
+const visibleScene:Scene=activePole==='023'?'unflagged':activePole==='025'?secondary.scene:scene;
+const current=scenes.find(x=>x.id===visibleScene)!;
+const activeStep=visibleScene==='continue'?4:visibleScene==='stopped'?3:visibleScene==='request'?2:['finding','hold','sent'].includes(visibleScene)?1:0;
 return <div className={styles.shell}>
 <div className={styles.toolbar}>
 <Link className={styles.backLink} href="/" target="_top" aria-label="Back to case study">← Case study</Link>
 <div className={styles.roleTabs} role="tablist" aria-label="View perspective">{(['field','office'] as const).map(role=><button key={role} id={`role-${role}`} role="tab" aria-selected={surface===role} aria-controls={`panel-${role}`} tabIndex={surface===role?0:-1} onClick={()=>setSurface(role)} onKeyDown={event=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(event.key)){event.preventDefault();const target=event.key==='Home'?'field':event.key==='End'?'office':role==='field'?'office':'field';setSurface(target);document.getElementById(`role-${target}`)?.focus();}}}>{role==='field'?<Smartphone size={16} aria-hidden="true"/>:<Monitor size={16} aria-hidden="true"/>}{role==='field'?'Field crew':'Office supervisor'}</button>)}</div>
-<Button className={styles.reset} variant="ghost" onClick={()=>{dispatch({type:'reset'});setSelectedDemoScene('finding');setResetKey(n=>n+1)}}><RotateCcw data-icon="inline-start" aria-hidden="true"/>Reset</Button>
+<Button className={styles.reset} variant="ghost" onClick={()=>{resetSecondary();dispatch({type:'reset'});setSelectedDemoScene('finding');setResetKey(n=>n+1)}}><RotateCcw data-icon="inline-start" aria-hidden="true"/>Reset</Button>
 </div>
 <div id="panel-field" role="tabpanel" aria-labelledby="role-field" hidden={surface!=='field'} tabIndex={0}>
-<main className={styles.stage}><section className={styles.deviceStage} aria-label="Interactive IKE device"><DeviceView scene={scene} poleNumber={pole} photoCount={photoCount} feedback={message} onCapture={()=>dispatch({type:'capture'})} onFlag={()=>dispatch({type:'flag'})} onAddPhoto={()=>dispatch({type:'add-photo'})} onNextPole={()=>dispatch({type:'next-pole'})} onUnable={()=>dispatch({type:'unable'})}/><p className={styles.deviceCaption}>IKE Field · Android capture concept</p></section></main>
+<main className={styles.stage}><section className={styles.deviceStage} aria-label="Interactive IKE device"><DeviceView scene={visibleScene} poleNumber={activePole==='024'?pole:activePole} expandedPole={activePole!=='024'} photoCount={activePole==='025'?secondary.photoCount:photoCount} feedback={activePole==='025'?secondary.message:message} onCapture={()=>dispatch({type:'capture'})} onFlag={()=>dispatch({type:'flag'})} onAddPhoto={()=>activePole==='025'?setSecondary(p=>({...p,photoCount:p.photoCount+1,scene:p.scene==='request'?'sent':p.scene,message:'Photo added to Pole 025. Work instruction unchanged.'})):dispatch({type:'add-photo'})} onNextPole={()=>activePole==='024'?setActivePole('025'):setActivePole('023')} onUnable={()=>activePole==='025'?setSecondary(p=>({...p,failureCount:p.failureCount+1,scene:'hold',message:'Office received: requested photos unavailable. Pole 025 remains on hold.'})):dispatch({type:'unable'})}/><p className={styles.deviceCaption}>IKE Field · Android capture concept</p></section></main>
 </div>
-<div className={styles.officeStage} id="panel-office" role="tabpanel" aria-labelledby="role-office" hidden={surface!=='office'} tabIndex={0}><OfficeView evidenceFailureCount={evidenceFailureCount024} noFinding={selectedDemoScene==='unflagged'} key={resetKey} initialScene={selectedDemoScene} analysisReady={analysisReady024} evidenceDelivered={evidenceDelivered024} photoCount={photoCount024} onInstruction={(instruction,reason)=>dispatch({type:'instruction-received',instruction,reason})}/></div>
+<div className={styles.officeStage} id="panel-office" role="tabpanel" aria-labelledby="role-office" hidden={surface!=='office'} tabIndex={0}><OfficeView activePole={activePole} onPoleChange={setActivePole} secondaryPhotoCount={secondary.photoCount} secondaryFailureCount={secondary.failureCount} onSecondaryInstruction={(instruction,reason)=>setSecondary(p=>({...p,scene:instruction==='continue'?'continue':instruction==='request'?'request':instruction==='stopped'?'stopped':'hold',message:`Supervisor instruction received: ${reason}`}))} evidenceFailureCount={evidenceFailureCount024} noFinding={selectedDemoScene==='unflagged'} key={resetKey} initialScene={selectedDemoScene} analysisReady={analysisReady024} evidenceDelivered={evidenceDelivered024} photoCount={photoCount024} onInstruction={(instruction,reason)=>dispatch({type:'instruction-received',instruction,reason})}/></div>
 <footer className={styles.journeyBar}>
 {queuedEvidenceFailure024 && <Button variant="outline" size="sm" onClick={()=>dispatch({type:"deliver-queued-failure"})}>Simulate queued update delivery</Button>}
 <div className={styles.journeyInner}>
 
 <nav className={styles.steps} aria-label="Journey moments">{journeySteps.map((step,index)=><button key={step.label} aria-current={activeStep===index?'step':undefined} onClick={()=>{selectScene(step.scene);setSurface(step.surface);}}><span className={styles.stepTrack}/><span>{step.label}</span></button>)}</nav>
-<label className={styles.scenarioLabel}><span>Scenario</span><select value={scene} onChange={event=>selectScene(event.target.value as Scene)}>{scenes.map(item=><option key={item.id} value={item.id}>{item.label}</option>)}</select></label>
+<label className={styles.scenarioLabel}><span>Scenario</span><select value={visibleScene} onChange={event=>selectScene(event.target.value as Scene)}>{scenes.map(item=><option key={item.id} value={item.id}>{item.label}</option>)}</select></label>
 </div>
 <details className={styles.context}><summary>About this demo <ChevronDown size={14} aria-hidden="true"/></summary><div><strong>{current.label}</strong><p>{current.description}</p><p>Photos, analysis, timing, and delivery are simulated. Selecting a journey moment or scenario loads an example; switching roles preserves the current review. Scenario selection resets both perspectives.</p></div></details>
 </footer>

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, MoveUpRight } from "lucide-react";
+import { ArrowRight, MoveUpRight, Check, LockKeyhole, FileCheck2, History, Camera } from "lucide-react";
 import styles from "./landing-page.module.css";
 
 // Original screenshots stay proportional and unwarped over generated environments.
@@ -52,16 +52,32 @@ export function LandingPage() {
       </section>
       <section className={`${styles.section} ${styles.assumptions}`} id="assumptions" aria-labelledby="assumptions-heading">
         <div className={styles.sectionIntro}><div><p className={styles.chapter}>02 / Assumptions</p><h2 id="assumptions-heading">Make the conditions<br />visible.</h2></div><p>These assumptions carry the design forward and need validation with crews, supervisors and utility data owners.</p></div>
-          <div className={styles.assumptionList}>
-            <div className={styles.assumptionPhoto}><Image src="/assets/v1-assumptions-corridor.png" alt="Illustrative utility corridor reused from the original design concept" fill sizes="(max-width: 767px) 100vw, 760px" /><span>Illustrative scenery · Original concept</span></div>
-            <p><strong>Capture before work.</strong> Useful device analysis, local saving and later sync need validation.</p>
-            <p><strong>Pause the affected pole.</strong> Unresolved nesting or inability to assess keeps it paused. Another pole must be independent and accessible.</p>
-            <p><strong>Named release authority.</strong> An authorized supervisor may resolve a false alarm with a reason. IKEstrel nesting follows the applicable procedure; elapsed time never authorizes work.</p>
-            <p><strong>Reversible, attributed records.</strong> Retain observations and edits alongside original AI output. Crew and admin species suggestions are not automatic ground truth.</p>
-            <p><strong>Private utility data.</strong> Select records, redact sensitive details and obtain approval before export or sharing. This is an assumption, not verified IKE policy.</p>
+          <div className={styles.assumptionStories}>
+            <article className={styles.captureStory}>
+              <Image src="/assets/v1-assumptions-corridor.png" alt="Illustrative utility corridor from the original concept" fill sizes="(max-width: 767px) 100vw, 600px" />
+              <div className={styles.storyCopy}><span className={styles.storyIndex}>01 / Timing</span><h3>Capture before work.</h3><p>Useful device analysis, local saving and later sync need validation.</p></div>
+              <div className={styles.captureReceipt}><Camera size={19} /><div><strong>Evidence captured</strong><span>Saved on device · Sync pending</span></div><Check size={17} /></div>
+              <small className={styles.storyImageNote}>Illustrative scenery · Original concept</small>
+            </article>
+            <article className={styles.pauseStory}>
+              <div className={styles.storyCopy}><span className={styles.storyIndex}>02 / Scope of the hold</span><h3>Pause the affected pole.</h3><p>Unresolved nesting or insufficient evidence keeps this pole on hold. We assume crews can work on other independent, available poles without pausing the entire work order.</p></div>
+              <div className={styles.poleDiagram} aria-label="Affected pole held; other poles assessed independently"><div><span>023</span><i /><small>Prior pole</small></div><div className={styles.heldPole}><span>024</span><i /><small>On hold</small></div><div><span>025</span><i /><small>Assess separately</small></div></div>
+            </article>
+            <article className={styles.authorityStory}>
+              <div className={styles.storyCopy}><span className={styles.storyIndex}>03 / Accountability</span><h3>Named release authority.</h3><p>The supervisor places, maintains or releases the hold and records the reason. Releasing a false alarm requires review; confirmed nesting follows the applicable procedure.</p></div>
+              <div className={styles.authorityReceipt}><FileCheck2 size={25} strokeWidth={1.4} /><strong>Supervisor decision</strong><span>Named reviewer</span><span>Recorded reason</span><span>Instruction received</span></div>
+            </article>
+            <article className={styles.recordStory}>
+              <div className={styles.storyCopy}><span className={styles.storyIndex}>04 / Evidence history</span><h3>Reversible, attributed records.</h3><p>Record who captured the evidence, who reviewed it, who made the work decision and who exported the data. Preserve original evidence and later corrections.</p></div>
+              <div className={styles.recordStack}><div><History size={18} /><strong>Original evidence retained</strong></div><div><span>Captured by crew</span><span>Reviewed by supervisor</span><span>Export attributed to sender</span></div></div>
+            </article>
+            <article className={styles.privateStory}>
+              <div className={styles.storyCopy}><span className={styles.storyIndex}>05 / Responsible sharing</span><h3>Private utility data.</h3><p>We assume captured data stays under utility control. Selected records need preparation and approval before export to Audubon for historical sightings and migration research.</p></div>
+              <div className={styles.privatePacket}><LockKeyhole size={25} strokeWidth={1.4} /><strong>Selected observations</strong><div aria-hidden="true"><i /><i /><i /></div><span>Approval before sharing</span></div>
+            </article>
           </div>
       </section>
-        <div className={styles.anchorBand} aria-label="Three design anchors"><div><span>01 / AI</span><strong>Uncertainty, reversibility & latency</strong></div><div><span>02 / Work decision</span><strong>Ownership & verifiability</strong></div><div><span>03 / Experience</span><strong>Simplicity</strong></div></div>
+        <section className={styles.anchorSection} aria-labelledby="anchors-heading"><h2 id="anchors-heading">Three anchors guide the design.</h2><div className={styles.anchorBand}><div><span>01 / AI</span><strong>Uncertainty, reversibility & latency</strong></div><div><span>02 / Work decision</span><strong>Ownership & verifiability</strong></div><div><span>03 / Experience</span><strong>Simplicity</strong></div></div></section>
       <section className={`${styles.section} ${styles.direction}`} id="decisions" aria-labelledby="decisions-heading">
         <div className={styles.sectionIntro}><div><p className={styles.chapter}>03 / Design direction</p><h2 id="decisions-heading">Simple in the field.<br />Accountable in the office.</h2></div><p>Prioritize the crew and supervisor’s shared work decision. Show who owns the decision, where the evidence is uncertain and whether the instruction has reached the crew.</p></div>
 

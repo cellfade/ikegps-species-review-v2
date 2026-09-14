@@ -6,12 +6,12 @@ import { ExpansionMap } from "./expansion-map";
 
 // Original screenshots stay proportional and unwarped over generated environments.
 function ProductScene({ variant }: { variant: 'hero' | 'field' | 'office' | 'compliance' }) {
-  const environment = variant === 'field' ? 'dimensional' : variant === 'compliance' ? 'editorial' : 'mineral';
-  const source = variant === 'field' ? 'device' : variant === 'compliance' ? 'compliance' : variant === 'office' ? 'office-corrected' : 'office';
+  const environment = variant === 'hero' ? 'review-v2' : variant === 'field' ? 'dimensional' : variant === 'compliance' ? 'editorial' : 'mineral';
+  const source = variant === 'field' ? 'device' : variant === 'compliance' ? 'compliance' : variant === 'office' ? 'office-corrected' : 'office-map';
   const label = variant === 'hero' ? 'Field capture and shared office review' : variant === 'field' ? 'IKE field capture with a possible nesting concern' : variant === 'office' ? 'Supervisor corrects a false flag and releases the hold' : 'Compliance record for the flagged pole';
   return <figure className={`${styles.productScene} ${styles[`scene${variant}`]}`}>
     <Image src={`/assets/${environment}-environment.png`} alt="" fill sizes="(max-width: 767px) 100vw, 1140px" className={styles.environment} priority={variant==='hero'} />
-    <a className={styles.uiPlane} href={`/assets/${source}-verified.png`} target="_blank" rel="noreferrer" aria-label={`Enlarge ${label.toLowerCase()}`}><Image src={`/assets/${source}-verified.png`} alt={label} width={source==='device'?358:source==='compliance'||source==='office-corrected'?1280:1289} height={source==='device'?636:source==='office-corrected'?1049:source==='compliance'?1040:1226} sizes={variant==='hero'?'(max-width: 767px) 90vw, 820px':'(max-width: 767px) 90vw, 700px'} unoptimized priority={variant==='hero'} /></a>
+    <a className={styles.uiPlane} href={`/assets/${source}-verified.png`} target="_blank" rel="noreferrer" aria-label={`Enlarge ${label.toLowerCase()}`}><Image src={`/assets/${source}-verified.png`} alt={label} width={source==='office-map'?1265:source==='device'?358:source==='compliance'||source==='office-corrected'?1280:1289} height={source==='office-map'?961:source==='device'?636:source==='office-corrected'?1049:source==='compliance'?1040:1226} sizes={variant==='hero'?'(max-width: 767px) 90vw, 820px':'(max-width: 767px) 90vw, 700px'} unoptimized priority={variant==='hero'} /></a>
     {variant==='hero' && <a className={styles.heroDevice} href="/assets/device-verified.png" target="_blank" rel="noreferrer" aria-label="Enlarge IKE field capture"><Image src="/assets/device-verified.png" alt="IKE capture view with a flag-for-office action" width={358} height={636} sizes="(max-width: 767px) 35vw, 270px" unoptimized priority /></a>}
     <figcaption className={styles.sceneCaption}><span>Prototype UI · Illustrative evidence</span><a href={`/assets/${source}-verified.png`} target="_blank" rel="noreferrer" aria-label={`View full-size ${label.toLowerCase()}`}>View full size <MoveUpRight size={12} aria-hidden="true" /></a></figcaption>
   </figure>;

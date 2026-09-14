@@ -1,12 +1,12 @@
-export type Scene = 'analysis'|'capture'|'finding'|'hold'|'request'|'sent'|'continue'|'offline';
+export type Scene = 'analysis'|'capture'|'finding'|'hold'|'request'|'sent'|'stopped'|'continue'|'offline';
 export type JourneyState = { scene: Scene; pole: string; photoCount: number; photoCount024: number; localPhotoCount024: number; analysisReady024: boolean; evidenceDelivered024: boolean; message: string; instruction: 'await-review'|'hold'|'continue'; concernId: string };
 export type JourneyEvent =
   | { type: 'scene'; scene: Scene }
   | { type: 'capture'|'flag'|'add-photo'|'next-pole'|'unable'|'reset' }
-  | { type: 'instruction-received'; instruction: 'hold'|'continue'|'request'; reason: string };
+  | { type: 'instruction-received'; instruction: 'hold'|'continue'|'request'|'stopped'; reason: string };
 
 export function seedScene(scene: Scene = 'finding'): JourneyState {
-  return {scene, pole:'024', photoCount:1, photoCount024:['capture','offline'].includes(scene)?0:1, localPhotoCount024:1, analysisReady024:!['capture','analysis','offline'].includes(scene), evidenceDelivered024:!['capture','offline'].includes(scene), message:'', instruction:scene==='continue'?'continue':['hold','request','sent','offline'].includes(scene)?'hold':'await-review', concernId:'concern-024'};
+  return {scene, pole:'024', photoCount:1, photoCount024:['capture','offline'].includes(scene)?0:1, localPhotoCount024:1, analysisReady024:!['capture','analysis','offline'].includes(scene), evidenceDelivered024:!['capture','offline'].includes(scene), message:'', instruction:scene==='continue'?'continue':['hold','request','sent','stopped','offline'].includes(scene)?'hold':'await-review', concernId:'concern-024'};
 }
 
 // Explicit scene selection simulates time/network conditions. User actions preserve record identity.
@@ -23,6 +23,6 @@ export function journeyReducer(state: JourneyState, event: JourneyEvent): Journe
     case 'next-pole': return {...state,pole:'025',scene:'capture',photoCount:0,instruction:'await-review',concernId:'concern-025',message:state.instruction==='continue'?'Pole 024 has authorization to continue. Now viewing pole 025.':'Pole 024 still awaits clearance. Now viewing pole 025.'};
     case 'instruction-received':
       if(!event.reason.trim()) return state;
-      return {...state,pole:'024',photoCount:state.localPhotoCount024,concernId:'concern-024',scene:event.instruction==='continue'?'continue':event.instruction==='request'?'request':'hold',instruction:event.instruction==='continue'?'continue':'hold',message:`Supervisor instruction received: ${event.reason}`};
+      return {...state,pole:'024',photoCount:state.localPhotoCount024,concernId:'concern-024',scene:event.instruction==='continue'?'continue':event.instruction==='request'?'request':event.instruction==='stopped'?'stopped':'hold',instruction:event.instruction==='continue'?'continue':'hold',message:`Supervisor instruction received: ${event.reason}`};
   }
 }

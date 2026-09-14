@@ -11,16 +11,18 @@ const scenes:{id:Scene,label:string,description:string}[]=[
 {id:'capture',label:'Capture a pole',description:'The existing capture workflow. A concern starts with the photo the crew already takes.'},
 {id:'analysis',label:'Analysis pending',description:'The photo is saved but analysis is not complete. Await review before work on this pole under our proposed pre-work assumption.'},
 {id:'finding',label:'A possible concern',description:'AI suggests an identity. The crew flags the concern without needing to identify the bird.'},
-{id:'hold',label:'Awaiting office review',description:'This pole stays on hold. The crew can continue to subsequent poles under our stated assumption.'},
-{id:'request',label:'More photos requested',description:'The supervisor keeps the hold and asks for another view. The crew receives one specific task.'},
+{id:'hold',label:'Review needed',description:'This pole stays on hold. The crew can continue to subsequent poles under our stated assumption.'},
+{id:'request',label:'More evidence needed',description:'The supervisor keeps the hold and asks for another view. The crew receives one specific task.'},
 {id:'sent',label:'New evidence delivered',description:'Additional photos join the same concern. The hold remains while the office reviews them.'},
-{id:'continue',label:'Decision received',description:'The supervisor has resolved a false alarm and recorded a reason to continue work.'},
+{id:'stopped',label:'Work stoppage confirmed',description:'A reviewed nesting concern keeps this pole stopped. A supervisor instruction has been received.'},
+{id:'continue',label:'Hold released',description:'The supervisor has resolved a false alarm and recorded a reason to continue work.'},
 {id:'offline',label:'Connection unavailable',description:'The concern is saved on the device. The pole remains held while delivery is pending.'}];
 const journeySteps: { label: string; scene: Scene; surface: 'field' | 'office' }[] = [
-  { label: 'Capture', scene: 'capture', surface: 'field' },
-  { label: 'Review', scene: 'hold', surface: 'office' },
-  { label: 'More evidence', scene: 'request', surface: 'field' },
-  { label: 'Decision', scene: 'continue', surface: 'field' },
+  { label: 'Evidence captured', scene: 'analysis', surface: 'field' },
+  { label: 'Review needed', scene: 'hold', surface: 'office' },
+  { label: 'More evidence needed', scene: 'request', surface: 'field' },
+  { label: 'Work stoppage confirmed', scene: 'stopped', surface: 'field' },
+  { label: 'Hold released', scene: 'continue', surface: 'field' },
 ];
 export function Prototype(){
 const [resetKey,setResetKey]=useState(0);
@@ -29,7 +31,7 @@ const [surface,setSurface]=useState<'field'|'office'>('field');
 const [{scene,pole,message,photoCount,photoCount024,analysisReady024,evidenceDelivered024},dispatch]=useReducer(journeyReducer,undefined,()=>seedScene());
 const selectScene=(next:Scene)=>{dispatch({type:'scene',scene:next});setSelectedDemoScene(next);setResetKey(n=>n+1);};
 const current=scenes.find(x=>x.id===scene)!;
-const activeStep=scene==='continue'?3:['request','sent'].includes(scene)?2:['hold','offline'].includes(scene)?1:0;
+const activeStep=scene==='continue'?4:scene==='stopped'?3:['request','sent'].includes(scene)?2:['hold','offline'].includes(scene)?1:0;
 return <div className={styles.shell}>
 <div className={styles.toolbar}>
 <Link className={styles.backLink} href="/" target="_top" aria-label="Back to case study">← Case study</Link>

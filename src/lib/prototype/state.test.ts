@@ -35,3 +35,11 @@ test('next-pole checkpoint cannot submit an unsupported second concern',()=>{
     assert.equal(journeyReducer(next,{type}),next);
   }
 });
+
+
+test('confirmed stoppage reaches the crew as a held outcome',()=>{
+ const before=seedScene('hold');
+ const after=journeyReducer(before,{type:'instruction-received',instruction:'stopped',reason:'Nesting observed'});
+ assert.equal(after.scene,'stopped');assert.equal(after.instruction,'hold');
+ assert.equal(seedScene('stopped').instruction,'hold');
+});

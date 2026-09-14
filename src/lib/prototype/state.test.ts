@@ -43,3 +43,14 @@ test('confirmed stoppage reaches the crew as a held outcome',()=>{
  assert.equal(after.scene,'stopped');assert.equal(after.instruction,'hold');
  assert.equal(seedScene('stopped').instruction,'hold');
 });
+
+test('nothing flagged is a result, not a hold release',()=>{
+  const result=seedScene('unflagged');
+  assert.equal(result.analysisReady024,true);
+  assert.equal(result.concernId,'');
+  assert.notEqual(result.instruction,'continue');
+  const next=journeyReducer(result,{type:'next-pole'});
+  assert.equal(next.pole,'025');
+  assert.equal(next.instruction,'await-review');
+  assert.match(next.message,/Normal field checks/);
+});

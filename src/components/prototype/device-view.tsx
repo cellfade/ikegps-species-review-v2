@@ -4,7 +4,7 @@ import { Aperture, ArrowRight, BatteryFull, Check, Circle, Crosshair, Eye, Image
 import { Button } from "@/components/ui/button";
 import styles from "./device-view.module.css";
 
-type DeviceScene = "capture" | "analysis" | "finding" | "hold" | "request" | "sent" | "stopped" | "continue" | "offline";
+type DeviceScene = "unflagged" | "capture" | "analysis" | "finding" | "hold" | "request" | "sent" | "stopped" | "continue" | "offline";
 export type DeviceViewProps = {
   scene: DeviceScene;
   onCapture: () => void;
@@ -23,10 +23,10 @@ export function DeviceView({ scene, onCapture, onFlag, onAddPhoto, onNextPole, o
   const title = scene === "analysis" ? "Wait before work on this pole" : scene === "stopped" ? "Work stoppage confirmed" : scene === "continue" ? "Hold released" : scene === "offline" ? "Saved on device" : scene === "request" ? "More evidence needed" : scene === "sent" ? "Photos sent to office" : "Review needed · On hold";
   return <section className={styles.device} aria-label={`IKE device, pole ${poleNumber}`}>
     <div className={styles.status} aria-hidden="true"><span><Crosshair/><Plus/><Eye/></span><span>{scene === "offline" ? <WifiOff/> : <Wifi/>}<MapPin/><BatteryFull/><b>12:15</b></span></div>
-    {nextPole ? <div className={styles.form}><header className={styles.formHeader}><div><span>Pole {poleNumber}</span><small>WO-1084 · Cedar Ridge</small></div></header><div className={styles.concern}><h3>Next pole reached</h3><p>The walkthrough continues with Pole 024 in office review.</p><small>Pole 024 keeps its latest work instruction. Capture at the next pole is outside this demonstration.</small></div></div> : camera ? <div className={styles.camera}>
+    {scene === "unflagged" && !nextPole ? <div className={styles.form}><header className={styles.formHeader}><div><span>Pole {poleNumber}</span><small>IKE Field · Capture saved</small></div></header><div className={styles.noFinding} role="status"><ImageIcon size={22}/><h3>Nothing flagged</h3><p>Analysis complete · Photo saved</p><small>AI can miss a concern. Follow normal field checks.</small></div><Button variant="outline" onClick={onNextPole}>Next pole <ArrowRight size={17}/></Button></div> : nextPole ? <div className={styles.form}><header className={styles.formHeader}><div><span>Pole {poleNumber}</span><small>WO-1084 · Cedar Ridge</small></div></header><div className={styles.concern}><h3>Next pole reached</h3><p>The walkthrough continues with Pole 024 in office review.</p><small>Pole 024 keeps its latest work instruction. Capture at the next pole is outside this demonstration.</small></div></div> : camera ? <div className={styles.camera}>
       {/* This is seeded demonstration imagery; no live camera or sensor readings. */}
       <svg className={styles.photo} viewBox="0 0 1024 1536" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Demonstration photo of a bird and possible nest on a utility pole; outlines are illustrative"><image href="/assets/pole-nest.png" width="1024" height="1536"/>{scene === "finding" && <g className={styles.detectionOutline}><path d="M397 494 L417 468 L429 451 L437 437 L450 426 L461 419 L475 417 L484 423 L487 430 L479 433 L476 447 L467 461 L457 473 L438 481 L425 487 L416 496 Z"/><path d="M379 493 L398 479 L429 461 L452 456 L482 454 L502 440 L520 447 L537 457 L563 450 L587 458 L596 479 L590 506 L604 529 L591 548 L591 574 L578 589 L573 611 L558 593 L534 583 L511 585 L492 569 L468 557 L453 536 L433 519 L408 516 Z"/></g>}</svg>
-      <div className={styles.cameraContext}>Pole {poleNumber}<small>IKEphoto · Capture preview</small></div>
+      <div className={styles.cameraContext}>Pole {poleNumber}<small>IKE Field · Capture preview</small></div>
       <div className={styles.guides} aria-hidden="true"/><div className={styles.reticle} aria-hidden="true"/>
       <div className={styles.adjustment} aria-hidden="true"><Plus/><span/><Minus/></div>
       {scene === "finding" && <div className={styles.finding} role="status"><div><AlertTriangle size={18}/><strong>Possible IKEstrel</strong></div><p>Possible nesting · Not yet reviewed</p>{feedback && <small className={styles.feedback} role="status">{feedback}</small>}<Button onClick={onFlag} className={styles.primary}>Flag for office <ArrowRight size={16}/></Button></div>}
@@ -41,7 +41,7 @@ export function DeviceView({ scene, onCapture, onFlag, onAddPhoto, onNextPole, o
         {scene === "request" && <button className={styles.textAction} onClick={onUnable}>Unable to collect these photos</button>}
       </div>
       {/* Proposed extra-evidence action; the parent simulates capture without changing work status. */}
-      <div className={styles.recordRow}><ImageIcon size={19}/><strong>IKEphoto</strong><span>{photoCount}</span><button className={styles.addPhoto} onClick={onAddPhoto} aria-label="Add photo to this pole"><Plus size={17}/><span>Add photo</span></button></div>
+      <div className={styles.recordRow}><ImageIcon size={19}/><strong>Photos</strong><span>{photoCount}</span><button className={styles.addPhoto} onClick={onAddPhoto} aria-label="Add photo to this pole"><Plus size={17}/><span>Add photo</span></button></div>
       {feedback && <div className={styles.feedback} role="status">{feedback}</div>}
       <div className={styles.evidence}><div className={styles.thumbnail} role="img" aria-label="Captured pole evidence"/><div><strong>{scene === "analysis" ? "Photo received" : "Possible IKEstrel"}</strong><p>{scene === "analysis" ? "Analysis pending" : "Possible nesting"}</p><small>{scene === "offline" ? "Pending upload" : "Evidence attached to this pole"}</small></div></div>
       <div className={styles.recordRow}><MessageSquare size={19}/><strong>Review</strong><span>{scene === "analysis" ? "Awaiting analysis" : scene === "continue" || scene === "stopped" ? "Recorded" : "Review needed"}</span></div>

@@ -176,3 +176,58 @@ main>.anchorBand{margin:0;padding:24px 32px;background:var(--surface);border-top
 .optionalJourney>summary,.automationDetail>summary{cursor:pointer;font-size:16px;font-weight:550;line-height:1.5}
 .optionalJourney .cycleSection{margin:28px 0 0;padding-top:0;border:0}
 .automationDetail{margin:0 0 36px}.automationDetail p{max-width:760px;margin-top:16px;font-size:14px;line-height:1.65;color:var(--secondary)}
+
+/* Focused assumption stories: each visual explains its own design condition. */
+.framing .anchorSection{padding:38px 36px 36px;margin-top:38px;border-radius:14px}
+.anchorIntro{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;margin-bottom:38px}
+.anchorIntro>span{font-size:11px;letter-spacing:.06em;text-transform:uppercase;line-height:1.5;padding-top:5px}
+.framing .anchorIntro h2{font-size:29px;line-height:1.13;letter-spacing:-.035em;font-weight:550;margin:0;width:65%}
+.framing .anchorBand{gap:28px}
+.framing .anchorBand>div{border-top:1px solid #16154b40;padding-top:17px}
+.framing .anchorBand span{font-size:10px;letter-spacing:.045em;opacity:1;color:#453649;margin-bottom:19px}
+.anchorBand h3{font-size:clamp(23px,2.35vw,30px);line-height:1.16;font-weight:550;letter-spacing:-.035em;color:#16154b;margin:0 0 10px}
+.anchorBand p{font-size:14px;line-height:1.5;color:#342f4a;margin:0}
+.assumptionStories{gap:20px}
+.assumptionStories .pauseStory{background:#182638;color:#fff;min-height:440px}
+.pauseStory .storyCopy{padding-bottom:25px;max-width:490px}
+.pauseStory .storyIndex{color:#edb88e}.pauseStory .storyCopy h3{color:#fff}.pauseStory .storyCopy p{color:#dae0e6}
+.poleLandscape{margin-top:auto;padding-top:14px;position:relative;background:linear-gradient(180deg,#182638 0%,#293c50 61%,#35463e 61%,#1b2c27 100%)}
+.poleLandscape:before{content:'';position:absolute;left:-5%;right:-5%;height:60px;top:57%;background:#40534c;clip-path:polygon(0 45%,12% 32%,31% 60%,55% 14%,70% 44%,86% 10%,100% 40%,100% 100%,0 100%)}
+.poleLandscape .poleDiagram{padding:0 32px 0;gap:18px;align-items:flex-end;min-height:148px}
+.poleLandscape .poleDiagram>div{gap:13px;position:relative;z-index:1}
+.poleLandscape .poleDiagram span{font-size:10px;letter-spacing:.03em;color:#fff}
+.poleLandscape .poleDiagram i{height:78px;width:6px;background:#cad1d1;box-shadow:3px 0 0 #101f2860}
+.poleLandscape .poleDiagram .heldPole i{height:94px;background:#ff9239}
+.poleLandscape .poleDiagram small{font-size:10px;color:#e8eeeb;white-space:nowrap;min-height:27px;display:flex;align-items:center}
+.poleLandscape .heldPole small{color:#241b16;background:#ffb16f;border:0;padding:5px 13px}
+.poleLandscape>p{position:relative;text-align:center;font-size:11px;line-height:1.5;color:#d5dfdb;margin:21px 20px 25px}
+.assumptionStories .authorityStory{background:#f0e8dc}.assumptionStories .recordStory{background:#e8ebef}.assumptionStories .privateStory{background:#e7e6ed}
+.authorityStory .storyCopy,.recordStory .storyCopy,.privateStory .storyCopy{padding:31px 27px 27px}
+.authorityStory .storyCopy h3,.recordStory .storyCopy h3,.privateStory .storyCopy h3{font-size:28px;line-height:1.15;margin-bottom:17px}
+.authorityStory .storyCopy p,.recordStory .storyCopy p,.privateStory .storyCopy p{font-size:14px;line-height:1.65}
+.authorityReceipt{margin:auto 25px 30px;padding:23px 23px 17px;gap:0;border:1px solid #d5cbbb;border-radius:8px;background:#fffcf6;box-shadow:0 13px 24px #58412716;transform:rotate(-2deg)}
+.authorityReceipt .receiptHeading{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;color:#9a542a}
+.authorityReceipt .receiptHeading span{font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:0;border:0;color:#73624b}
+.authorityReceipt>strong{font-size:26px;line-height:1.14;font-weight:500;letter-spacing:-.03em;color:#242439;margin-bottom:27px}
+.receiptSignature{padding-top:13px;border-top:1px solid #b5a38d}
+.authorityReceipt .receiptSignature span{display:block;padding:0;border:0;font-size:9px;color:#71675a;margin-bottom:7px}
+.receiptSignature b{font-size:14px;font-weight:550;letter-spacing:-.015em;color:#35303a}
+.receiptFooter{display:flex;gap:7px;align-items:center;margin-top:22px;color:#675747}
+.authorityReceipt .receiptFooter span{border:0;padding:0;font-size:10px;color:inherit}
+.recordStack{margin:auto 23px 35px;padding:23px 20px 17px;transform:none;isolation:isolate;border-color:#d7dce1;border-radius:8px;background:#fff;box-shadow:0 10px 22px #22314512}
+.recordStack:before{inset:8px -6px -9px 6px;background:#f6f7f8;border-color:#cdd2d9;z-index:-1;transform:rotate(2deg)}
+.recordStack:after{content:'';position:absolute;inset:16px -11px -16px 11px;background:#dee3e8;border:1px solid #cbd0d7;border-radius:8px;z-index:-2;transform:rotate(4deg)}
+.recordStack .recordHeading{display:flex;gap:8px;align-items:center;font-size:11px;margin-bottom:23px;color:#34415a}
+.recordStack ol{list-style:none;padding:0;margin:0;display:grid;gap:0}.recordStack li{display:flex;gap:12px;position:relative;padding-bottom:22px}.recordStack li:last-child{padding-bottom:0}
+.recordStack li:not(:last-child):before{content:'';position:absolute;width:1px;background:#d0d7df;left:10px;top:23px;bottom:0}
+.recordStack li>span{padding:0;border:0;display:flex;align-items:center;justify-content:center;flex-shrink:0;width:21px;height:21px;border-radius:50%;background:#eef0f4;color:#59667b;font-size:9px}
+.recordStack li strong{display:block;font-size:12px;font-weight:550;line-height:1.5;color:#283347}.recordStack li small{display:block;font-size:9px;color:#637085;line-height:1.5;margin-top:3px}
+.recordStack .recordCaption{display:block;font-size:9px;color:#637085;border-top:1px solid #e3e7ec;margin-top:19px;padding-top:13px}
+.privatePacket{margin:auto 23px 30px;padding:23px 22px 19px;border:1px solid #d4d0df;background:#faf9fc;box-shadow:0 12px 24px #2923430d;border-radius:8px;gap:0}
+.privatePacket .packetHeading{display:flex;align-items:center;gap:8px;color:#756881;margin-bottom:23px}.packetHeading span{font-size:9px;letter-spacing:.04em;text-transform:uppercase}
+.privatePacket>strong{font-size:26px;font-weight:500;line-height:1.13;letter-spacing:-.025em;margin-bottom:21px;color:#30283c}
+.privatePacket .packetRows{display:grid;gap:13px}.packetRows>span{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:10px;line-height:1.5;color:#6c637a}
+.packetRows i{display:block;width:47px!important;height:7px;background:#30283c!important;border-radius:1px;transform:rotate(-1deg)}
+.privatePacket .packetSeal{display:flex;align-items:center;justify-content:space-between;gap:4px;border-top:1px solid #ddd7e6;padding-top:16px;margin-top:22px;font-size:9px;color:#685a77}
+@media(max-width:1000px) and (min-width:768px){.authorityStory .storyCopy,.recordStory .storyCopy,.privateStory .storyCopy{padding:25px 20px}.authorityStory .storyCopy h3,.recordStory .storyCopy h3,.privateStory .storyCopy h3{font-size:24px}.authorityReceipt,.recordStack,.privatePacket{margin-left:16px;margin-right:16px;padding-left:15px;padding-right:15px}.recordStack li small{font-size:8px}.packetRows>span{font-size:9px}}
+@media(max-width:767px){.framing .anchorSection{padding:30px 25px;margin-top:28px}.anchorIntro{display:block;margin-bottom:29px}.anchorIntro>span{display:block;margin-bottom:15px}.framing .anchorIntro h2{width:auto;font-size:29px}.framing .anchorBand{gap:22px}.framing .anchorBand>div{padding-top:17px}.framing .anchorBand span{margin-bottom:11px}.anchorBand h3{font-size:27px;margin-bottom:7px}.anchorBand p{font-size:14px}.assumptionStories .pauseStory{min-height:430px}.pauseStory .storyCopy{padding:28px 25px 20px}.poleLandscape .poleDiagram{padding-left:27px;padding-right:27px;gap:12px}.poleLandscape .poleDiagram small{font-size:9px}.authorityStory .storyCopy,.recordStory .storyCopy,.privateStory .storyCopy{padding:29px 25px 24px}.authorityReceipt,.recordStack,.privatePacket{margin:5px 28px 33px;padding:25px}.recordStack{margin-bottom:42px}.authorityReceipt>strong,.privatePacket>strong{font-size:29px}.recordStack li small{font-size:11px}.recordStack li strong{font-size:13px}.privatePacket .packetRows>span{font-size:12px}.privatePacket .packetSeal{font-size:10px}.authorityStory .storyCopy h3,.recordStory .storyCopy h3,.privateStory .storyCopy h3{font-size:29px}}

@@ -22,7 +22,7 @@ export function LandingPage() {
     <header className={styles.header}>
       <a href="#overview" className={styles.brand} aria-label="ikeGPS design concept, overview">ike<span>GPS</span></a>
       <span className={styles.projectName}>Endangered species identification</span>
-      <nav aria-label="Presentation"><a href="#questions">Questions</a><a href="#assumptions">Assumptions</a><a href="#decisions">Direction</a><a href="#journey">Prototype</a></nav>
+      <nav aria-label="Presentation"><a href="#framing">Problem</a><a href="#questions">Questions</a><a href="#assumptions">Assumptions</a><a href="#decisions">Process</a><a href="#journey">Prototype</a></nav>
     </header>
     <main id="main-content">
       <div className={styles.hero} id="overview" aria-labelledby="hero-heading">
@@ -40,8 +40,18 @@ export function LandingPage() {
       </div>
 
 
+      <section className={`${styles.section} ${styles.framing}`} id="framing" aria-labelledby="framing-heading">
+        <div className={styles.sectionIntro}><div><p className={styles.chapter}>01 / Problem framing</p><h2 id="framing-heading">One work decision.<br />Two different moments.</h2></div><p>Crews collect evidence on site. Supervisors usually review it later. The goal is to shorten that gap so a concern gets an accountable decision while the crew can still inspect the pole.</p></div>
+        <div className={styles.peopleRows}>
+          <article><span>Primary / Field crew</span><h3>A clear next step<br />at the pole.</h3><p>Capture useful evidence with little extra effort. Unfamiliar species, poor photos or weak connectivity should not force a confident answer.</p></article>
+          <article><span>Primary / Supervisor</span><h3>Evidence to make<br />and explain the call.</h3><p>Distinguish AI suggestions from observations, record who decided what and why, and return a clear work instruction.</p></article>
+          <article><span>Later / Audubon partner</span><h3>Usable sightings,<br />with their context.</h3><p>Receive approved imagery, location, identification source and uncertainty. Conservation sharing follows the immediate work decision.</p></article>
+        </div>
+        <div className={styles.designTension}><p className={styles.chapter}>The design tension</p><h3>The office owns a decision whose evidence the crew collects.</h3><p>Speed competes with evidence quality. False alarms compete with missed nesting. A bird in frame does not prove nesting, and “nothing flagged” does not imply clearance.</p></div>
+        <section className={styles.anchorSection} aria-labelledby="anchors-heading"><h2 id="anchors-heading">Three anchors guide the design.</h2><div className={styles.anchorBand}><div><span>01 / AI</span><strong>Uncertainty, reversibility & latency</strong></div><div><span>02 / Work decision</span><strong>Ownership & verifiability</strong></div><div><span>03 / Experience</span><strong>Simplicity</strong></div></div></section>
+      </section>
       <section className={`${styles.section} ${styles.questions}`} id="questions" aria-labelledby="questions-heading">
-        <div className={styles.sectionIntro}><div><p className={styles.chapter}>01 / Questions</p><h2 id="questions-heading">Start with<br />what we don’t know.</h2></div><p>These are the five questions from my submitted framing, with the research methods summarized below.</p></div>
+        <div className={styles.sectionIntro}><div><p className={styles.chapter}>02 / Questions</p><h2 id="questions-heading">Start with<br />what we don’t know.</h2></div><p>These are the five questions from my submitted framing, with the research methods summarized below.</p></div>
           <div className={styles.questionList}><ul>
             <li><strong>Can review happen before contact with the pole?</strong><br />Observe capture-to-work timing and reviewer coverage. Move review earlier if photography is too late; test delayed review and escalation when coverage is unavailable.</li>
             <li><strong>Who owns the pause, reporting and release?</strong><br />Walk through false alarms and nesting concerns with operations and a compliance specialist. Establish reviewers, recipients, completion evidence and release authority.</li>
@@ -51,7 +61,7 @@ export function LandingPage() {
           </ul></div>
       </section>
       <section className={`${styles.section} ${styles.assumptions}`} id="assumptions" aria-labelledby="assumptions-heading">
-        <div className={styles.sectionIntro}><div><p className={styles.chapter}>02 / Assumptions</p><h2 id="assumptions-heading">Make the conditions<br />visible.</h2></div><p>These assumptions carry the design forward and need validation with crews, supervisors and utility data owners.</p></div>
+        <div className={styles.sectionIntro}><div><p className={styles.chapter}>03 / Assumptions</p><h2 id="assumptions-heading">Make the conditions<br />visible.</h2></div><p>These assumptions carry the design forward and need validation with crews, supervisors and utility data owners.</p></div>
           <div className={styles.assumptionStories}>
             <article className={styles.captureStory}>
               <Image src="/assets/v1-assumptions-corridor.png" alt="Illustrative utility corridor from the original concept" fill sizes="(max-width: 767px) 100vw, 600px" />
@@ -77,23 +87,24 @@ export function LandingPage() {
             </article>
           </div>
       </section>
-        <section className={styles.anchorSection} aria-labelledby="anchors-heading"><h2 id="anchors-heading">Three anchors guide the design.</h2><div className={styles.anchorBand}><div><span>01 / AI</span><strong>Uncertainty, reversibility & latency</strong></div><div><span>02 / Work decision</span><strong>Ownership & verifiability</strong></div><div><span>03 / Experience</span><strong>Simplicity</strong></div></div></section>
-      <section className={`${styles.section} ${styles.direction}`} id="decisions" aria-labelledby="decisions-heading">
-        <div className={styles.sectionIntro}><div><p className={styles.chapter}>03 / Design direction</p><h2 id="decisions-heading">Simple in the field.<br />Accountable in the office.</h2></div><p>Prioritize the crew and supervisor’s shared work decision. Show who owns the decision, where the evidence is uncertain and whether the instruction has reached the crew.</p></div>
 
+      <section className={`${styles.section} ${styles.direction}`} id="decisions" aria-labelledby="decisions-heading">
+        <div className={styles.sectionIntro}><div><p className={styles.chapter}>04 / Design process</p><h2 id="decisions-heading">Connect the evidence<br />to the next action.</h2></div><p>The proposed workflow keeps species, nesting and work status separate. These selected touchpoints show how evidence reaches review and how the decision returns to the crew.</p></div>
+
+        <section className={styles.cycleSection} aria-labelledby="cycle-heading">
+          <div className={styles.cycleIntro}><div><p className={styles.chapter}>The review cycle</p><h3 id="cycle-heading">How a concern reaches<br />a work decision.</h3></div><p>Five states connect the evidence to a supervisor’s decision. Requests for more evidence return to review while the affected pole stays on hold.</p></div>
+          <figure className={styles.cycleFigure}><a href="/assets/review-state-cycle.png" target="_blank" rel="noreferrer" aria-label="Open full-size five-state review diagram"><Image src="/assets/review-state-cycle.png" width={1660} height={880} alt="Evidence captured leads to Review needed. More evidence needed loops back to review. The supervisor confirms Work stoppage or releases the hold. Message delivery is tracked separately." sizes="(max-width: 767px) 100vw, 1142px" /></a><figcaption><span>Evidence can change the assessment. Only a recorded work decision changes the instruction.</span><a href="https://www.figma.com/board/qdbKTuDN054FcmO2aOxauJ?node-id=15-349" target="_blank" rel="noreferrer">Open in FigJam <MoveUpRight size={14} aria-hidden="true" /></a></figcaption></figure>
+        </section>
         <div className={styles.bento}>
           <article className={styles.bentoOffice}><div className={styles.bentoCopy}><span className={styles.principleLabel}>Office pole review</span><h3>Review the evidence.<br />Record the decision.</h3><p>Open a notification or photo badge to reach the same review modal. Inspect the original photo, correct the suggestion and record a work decision.</p></div><ProductScene variant="office" /></article>
           <article className={styles.bentoField}><div className={styles.bentoCopy}><span className={styles.principleLabel}>IKE field capture</span><h3>Flag a concern<br />during capture.</h3><p>The crew flags concerns; the supervisor verifies or corrects the assessment. One large action limits interruption. Glove use, sunlight and completion time still need field testing.</p></div><ProductScene variant="field" /></article>
           <article className={styles.bentoLatency}><div className={styles.bentoCopy}><span className={styles.principleLabel}>Evidence return</span><h3>Request photos.<br />Retain the hold.</h3><p>The supervisor sends a photo request with the work status. The crew adds evidence to the same pole; the hold remains during review.</p><div className={styles.latencySteps}><span>Saved on device</span><ArrowRight size={16} aria-hidden="true" /><span>Delivered to office</span><ArrowRight size={16} aria-hidden="true" /><strong>Human review</strong></div></div></article>
           <article className={styles.bentoOwnership}><div className={styles.bentoCopy}><span className={styles.principleLabel}>Compliance record</span><h3>Review a flag.<br />Export its record.</h3><p>Collect flagged poles in one table. Each record opens the same review modal. Approved observations can support Audubon later.</p><span className={styles.bentoNote}>Export prepares evidence. It does not complete reporting.</span></div><ProductScene variant="compliance" /></article>
         </div>
-        <div className={styles.researchFindings}><h3>Evidence behind the direction</h3><p>FWS guidance covers nests with eggs, chicks or dependent young. A photo with no visible adult cannot settle nest status. <a href="https://www.fws.gov/story/bird-nests">FWS nest guidance ↗</a></p><p>Eagle nests receive protection even when unoccupied. We keep species and nesting separate; the fictional scenario does not encode legal clearance. <a href="https://www.fws.gov/program/eagle-management/eagle-nest-removal-permits">FWS eagle guidance ↗</a></p><p>Visible system status helps people understand what happened. Upload, analysis and crew receipt therefore stay separate. <a href="https://www.nngroup.com/articles/ten-usability-heuristics/">NN/g usability heuristics ↗</a></p></div><section className={styles.cycleSection} aria-labelledby="cycle-heading">
-          <div className={styles.cycleIntro}><div><p className={styles.chapter}>The review cycle</p><h3 id="cycle-heading">How a concern reaches<br />a work decision.</h3></div><p>Five states connect the evidence to a supervisor’s decision. Requests for more evidence return to review while the affected pole stays on hold.</p></div>
-          <figure className={styles.cycleFigure}><a href="/assets/review-state-cycle.png" target="_blank" rel="noreferrer" aria-label="Open full-size five-state review diagram"><Image src="/assets/review-state-cycle.png" width={1660} height={880} alt="Evidence captured leads to Review needed. More evidence needed loops back to review. The supervisor confirms Work stoppage or releases the hold. Message delivery is tracked separately." sizes="(max-width: 767px) 100vw, 1142px" /></a><figcaption><span>Evidence can change the assessment. Only a recorded work decision changes the instruction.</span><a href="https://www.figma.com/board/qdbKTuDN054FcmO2aOxauJ?node-id=15-349" target="_blank" rel="noreferrer">Open in FigJam <MoveUpRight size={14} aria-hidden="true" /></a></figcaption></figure>
-        </section>
+        <div className={styles.researchFindings}><h3>Evidence behind the direction</h3><p>FWS guidance covers nests with eggs, chicks or dependent young. A photo with no visible adult cannot settle nest status. <a href="https://www.fws.gov/story/bird-nests">FWS nest guidance ↗</a></p><p>Eagle nests receive protection even when unoccupied. We keep species and nesting separate; the fictional scenario does not encode legal clearance. <a href="https://www.fws.gov/program/eagle-management/eagle-nest-removal-permits">FWS eagle guidance ↗</a></p><p>Visible system status helps people understand what happened. Upload, analysis and crew receipt therefore stay separate. <a href="https://www.nngroup.com/articles/ten-usability-heuristics/">NN/g usability heuristics ↗</a></p></div>
       </section>
       <section className={`${styles.section} ${styles.next}`} id="journey" aria-labelledby="journey-heading">
-        <div className={styles.sectionIntro}><div><p className={styles.chapter}>04 / Prototype</p><h2 id="journey-heading">Your turn<br />to make the call.</h2></div><p>Switch between crew and supervisor to follow the same concern through the selected touchpoints.</p></div>
+        <div className={styles.sectionIntro}><div><p className={styles.chapter}>05 / Prototype</p><h2 id="journey-heading">Your turn<br />to make the call.</h2></div><p>Switch between crew and supervisor to follow the same concern through the selected touchpoints.</p></div>
         <div className={styles.prototypeEmbed}>
           <div className={styles.embedHeader}><div><h3>Field capture & office review</h3><p>Interactive concept · Simulated analysis and delivery</p></div><Link href="/prototype" className={styles.embedLink}>Open full view <MoveUpRight size={16} aria-hidden="true" /></Link></div>
           <iframe src="/prototype?embed=1" title="Interactive ikeGPS prototype: field capture and office review" className={styles.prototypeFrame} loading="lazy" />

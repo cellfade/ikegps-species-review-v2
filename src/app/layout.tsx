@@ -11,13 +11,13 @@ export const metadata: Metadata = {
     title: 'Less waiting. Clearer decisions. | ikeGPS design case study',
     description: 'Field evidence. Human review. A clear next step. A product design exploration by Andrew Miller.',
     siteName: 'ikeGPS · Design case study',
-    images: [{ url: '/assets/og-case-study.jpg', width: 1200, height: 630, alt: 'ikeGPS species review case study by Andrew Miller, showing the field capture and office review prototype.' }],
+    images: [{ url: '/assets/og-case-study-v2.jpg', width: 1200, height: 630, alt: 'ikeGPS species review case study by Andrew Miller, showing the field capture and office review prototype.' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Less waiting. Clearer decisions. | ikeGPS design case study',
     description: 'Field evidence. Human review. A clear next step.',
-    images: ['/assets/og-case-study.jpg'],
+    images: ['/assets/og-case-study-v2.jpg'],
   },
 };
 export default function RootLayout({children}:Readonly<{children:React.ReactNode}>){return <html lang="en" className={instrument.variable}><body>{children}</body></html>}

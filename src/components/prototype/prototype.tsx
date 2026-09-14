@@ -29,7 +29,7 @@ export function Prototype(){
 const [resetKey,setResetKey]=useState(0);
 const [selectedDemoScene,setSelectedDemoScene]=useState<Scene>('finding');
 const [surface,setSurface]=useState<'field'|'office'>('field');
-const [{scene,pole,message,photoCount,photoCount024,analysisReady024,evidenceDelivered024},dispatch]=useReducer(journeyReducer,undefined,()=>seedScene());
+const [{scene,pole,message,photoCount,photoCount024,analysisReady024,evidenceDelivered024,evidenceFailureCount024,queuedEvidenceFailure024},dispatch]=useReducer(journeyReducer,undefined,()=>seedScene());
 const selectScene=(next:Scene)=>{dispatch({type:'scene',scene:next});setSelectedDemoScene(next);setResetKey(n=>n+1);};
 const current=scenes.find(x=>x.id===scene)!;
 const activeStep=scene==='continue'?4:scene==='stopped'?3:scene==='request'?2:['finding','hold','sent'].includes(scene)?1:0;
@@ -42,8 +42,9 @@ return <div className={styles.shell}>
 <div id="panel-field" role="tabpanel" aria-labelledby="role-field" hidden={surface!=='field'} tabIndex={0}>
 <main className={styles.stage}><section className={styles.deviceStage} aria-label="Interactive IKE device"><DeviceView scene={scene} poleNumber={pole} photoCount={photoCount} feedback={message} onCapture={()=>dispatch({type:'capture'})} onFlag={()=>dispatch({type:'flag'})} onAddPhoto={()=>dispatch({type:'add-photo'})} onNextPole={()=>dispatch({type:'next-pole'})} onUnable={()=>dispatch({type:'unable'})}/><p className={styles.deviceCaption}>IKE Field · Android capture concept</p></section></main>
 </div>
-<div className={styles.officeStage} id="panel-office" role="tabpanel" aria-labelledby="role-office" hidden={surface!=='office'} tabIndex={0}><OfficeView noFinding={selectedDemoScene==='unflagged'} key={resetKey} initialScene={selectedDemoScene} analysisReady={analysisReady024} evidenceDelivered={evidenceDelivered024} photoCount={photoCount024} onInstruction={(instruction,reason)=>dispatch({type:'instruction-received',instruction,reason})}/></div>
+<div className={styles.officeStage} id="panel-office" role="tabpanel" aria-labelledby="role-office" hidden={surface!=='office'} tabIndex={0}><OfficeView evidenceFailureCount={evidenceFailureCount024} noFinding={selectedDemoScene==='unflagged'} key={resetKey} initialScene={selectedDemoScene} analysisReady={analysisReady024} evidenceDelivered={evidenceDelivered024} photoCount={photoCount024} onInstruction={(instruction,reason)=>dispatch({type:'instruction-received',instruction,reason})}/></div>
 <footer className={styles.journeyBar}>
+{queuedEvidenceFailure024 && <Button variant="outline" size="sm" onClick={()=>dispatch({type:"deliver-queued-failure"})}>Simulate queued update delivery</Button>}
 <div className={styles.journeyInner}>
 
 <nav className={styles.steps} aria-label="Journey moments">{journeySteps.map((step,index)=><button key={step.label} aria-current={activeStep===index?'step':undefined} onClick={()=>{selectScene(step.scene);setSurface(step.surface);}}><span className={styles.stepTrack}/><span>{step.label}</span></button>)}</nav>

@@ -7,6 +7,7 @@ import styles from "./device-view.module.css";
 type DeviceScene = "unflagged" | "capture" | "analysis" | "finding" | "hold" | "request" | "sent" | "stopped" | "continue" | "offline";
 export type DeviceViewProps = {
   scene: DeviceScene;
+  expandedPole?: boolean;
   onCapture: () => void;
   onFlag: () => void;
   onAddPhoto: () => void;
@@ -17,8 +18,8 @@ export type DeviceViewProps = {
   feedback?: string;
 };
 
-export function DeviceView({ scene, onCapture, onFlag, onAddPhoto, onNextPole, onUnable, poleNumber = "024", photoCount = 1, feedback }: DeviceViewProps) {
-  const nextPole = poleNumber !== "024";
+export function DeviceView({ expandedPole = false, scene, onCapture, onFlag, onAddPhoto, onNextPole, onUnable, poleNumber = "024", photoCount = 1, feedback }: DeviceViewProps) {
+  const nextPole = poleNumber !== "024" && !expandedPole;
   const camera = !nextPole && (scene === "capture" || scene === "finding");
   const title = scene === "analysis" ? "Wait before work on this pole" : scene === "stopped" ? "Work stoppage confirmed" : scene === "continue" ? "Hold released" : scene === "offline" ? "Saved on device" : scene === "request" ? "More evidence needed" : scene === "sent" ? "Photos sent to office" : "Review needed · On hold";
   return <section className={styles.device} aria-label={`IKE device, pole ${poleNumber}`}>
@@ -41,9 +42,9 @@ export function DeviceView({ scene, onCapture, onFlag, onAddPhoto, onNextPole, o
         {(scene === "request" || scene === "offline") && <button className={styles.textAction} onClick={onUnable}>Unable to collect these photos</button>}
       </div>
       {/* Proposed extra-evidence action; the parent simulates capture without changing work status. */}
-      <div className={styles.recordRow}><ImageIcon size={19}/><strong>Photos</strong><span>{photoCount}</span><button className={styles.addPhoto} onClick={onAddPhoto} aria-label="Add photo to this pole"><Plus size={17}/><span>Add photo</span></button></div>
+      <div className={styles.recordRow}><ImageIcon size={19}/><strong>Photos</strong><span>{photoCount}</span>{scene !== "continue" && <button className={styles.addPhoto} onClick={onAddPhoto} aria-label="Add photo to this pole"><Plus size={17}/><span>Add photo</span></button>}</div>
       {feedback && <div className={styles.feedback} role="status">{feedback}</div>}
-      <div className={styles.evidence}><div className={styles.thumbnail} role="img" aria-label="Captured pole evidence"/><div><strong>{scene === "analysis" ? "Photo received" : "Possible IKEstrel"}</strong><p>{scene === "analysis" ? "Analysis pending" : "Possible nesting"}</p><small>{scene === "offline" ? "Pending upload" : "Evidence attached to this pole"}</small></div></div>
+      <div className={styles.evidence}><div className={styles.thumbnail} style={poleNumber === "025" ? {backgroundImage:"url(/assets/pole-trash-bag.png)"} : undefined} role="img" aria-label="Captured pole evidence"/><div><strong>{scene === "analysis" ? "Photo received" : poleNumber === "025" ? scene === "continue" ? "Incorrect flag verified" : "Possible nest" : "Possible IKEstrel"}</strong><p>{scene === "analysis" ? "Analysis pending" : poleNumber === "025" && scene === "continue" ? "No nesting observed" : "Possible nesting"}</p><small>{scene === "offline" ? "Pending upload" : "Evidence attached to this pole"}</small></div></div>
       <div className={styles.recordRow}><MessageSquare size={19}/><strong>Review</strong><span>{scene === "analysis" ? "Awaiting analysis" : scene === "continue" || scene === "stopped" ? "Recorded" : "Review needed"}</span></div>
     </div>}
     <div className={styles.android} aria-hidden="true"><Triangle/><Circle/><Square/></div>

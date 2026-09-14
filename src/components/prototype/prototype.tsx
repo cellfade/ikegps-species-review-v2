@@ -31,21 +31,21 @@ const selectScene=(next:Scene)=>{dispatch({type:'scene',scene:next});setSelected
 const current=scenes.find(x=>x.id===scene)!;
 const activeStep=scene==='continue'?3:['request','sent'].includes(scene)?2:['hold','offline'].includes(scene)?1:0;
 return <div className={styles.shell}>
-<header className={styles.header}><Link className={styles.brand} href="/"><span className={styles.brandMark}>ike</span><span className={styles.productName}>Endangered species identification</span></Link><Link className={styles.backLink} href="/">Case study</Link></header>
 <div className={styles.toolbar}>
+<Link className={styles.backLink} href="/" target="_top" aria-label="Back to case study">← Case study</Link>
 <div className={styles.roleTabs} role="tablist" aria-label="View perspective">{(['field','office'] as const).map(role=><button key={role} id={`role-${role}`} role="tab" aria-selected={surface===role} aria-controls={`panel-${role}`} tabIndex={surface===role?0:-1} onClick={()=>setSurface(role)} onKeyDown={event=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(event.key)){event.preventDefault();const target=event.key==='Home'?'field':event.key==='End'?'office':role==='field'?'office':'field';setSurface(target);document.getElementById(`role-${target}`)?.focus();}}}>{role==='field'?<Smartphone size={16} aria-hidden="true"/>:<Monitor size={16} aria-hidden="true"/>}{role==='field'?'Field crew':'Office supervisor'}</button>)}</div>
 <Button className={styles.reset} variant="ghost" onClick={()=>{dispatch({type:'reset'});setSelectedDemoScene('finding');setResetKey(n=>n+1)}}><RotateCcw data-icon="inline-start" aria-hidden="true"/>Reset</Button>
 </div>
 <div id="panel-field" role="tabpanel" aria-labelledby="role-field" hidden={surface!=='field'} tabIndex={0}>
-<main className={styles.stage}><section className={styles.deviceStage} aria-label="Interactive IKE device"><div className={styles.deviceHeading}><span>Cedar Ridge / Work order 1084</span><strong>Pole {pole}</strong></div><DeviceView scene={scene} poleNumber={pole} photoCount={photoCount} feedback={message} onCapture={()=>dispatch({type:'capture'})} onFlag={()=>dispatch({type:'flag'})} onAddPhoto={()=>dispatch({type:'add-photo'})} onNextPole={()=>dispatch({type:'next-pole'})} onUnable={()=>dispatch({type:'unable'})}/><p className={styles.deviceCaption}>IKE Field · Android capture concept</p></section></main>
+<main className={styles.stage}><section className={styles.deviceStage} aria-label="Interactive IKE device"><DeviceView scene={scene} poleNumber={pole} photoCount={photoCount} feedback={message} onCapture={()=>dispatch({type:'capture'})} onFlag={()=>dispatch({type:'flag'})} onAddPhoto={()=>dispatch({type:'add-photo'})} onNextPole={()=>dispatch({type:'next-pole'})} onUnable={()=>dispatch({type:'unable'})}/><p className={styles.deviceCaption}>IKE Field · Android capture concept</p></section></main>
 </div>
-<div id="panel-office" role="tabpanel" aria-labelledby="role-office" hidden={surface!=='office'} tabIndex={0}><OfficeView key={resetKey} initialScene={selectedDemoScene} analysisReady={analysisReady024} evidenceDelivered={evidenceDelivered024} photoCount={photoCount024} onInstruction={(instruction,reason)=>dispatch({type:'instruction-received',instruction,reason})}/></div>
+<div className={styles.officeStage} id="panel-office" role="tabpanel" aria-labelledby="role-office" hidden={surface!=='office'} tabIndex={0}><OfficeView key={resetKey} initialScene={selectedDemoScene} analysisReady={analysisReady024} evidenceDelivered={evidenceDelivered024} photoCount={photoCount024} onInstruction={(instruction,reason)=>dispatch({type:'instruction-received',instruction,reason})}/></div>
 <footer className={styles.journeyBar}>
 <div className={styles.journeyInner}>
-<div className={styles.journeyTitle}><strong>Explore the journey</strong><span>Demo navigation, not work progress</span></div>
+
 <nav className={styles.steps} aria-label="Journey moments">{journeySteps.map((step,index)=><button key={step.label} aria-current={activeStep===index?'step':undefined} onClick={()=>{selectScene(step.scene);setSurface(step.surface);}}><span className={styles.stepTrack}/><span>{step.label}</span></button>)}</nav>
-<label className={styles.scenarioLabel}>Scenario<select value={scene} onChange={event=>selectScene(event.target.value as Scene)}>{scenes.map(item=><option key={item.id} value={item.id}>{item.label}</option>)}</select></label>
+<label className={styles.scenarioLabel}><span>Scenario</span><select value={scene} onChange={event=>selectScene(event.target.value as Scene)}>{scenes.map(item=><option key={item.id} value={item.id}>{item.label}</option>)}</select></label>
 </div>
-<details className={styles.context}><summary>About this moment <ChevronDown size={14} aria-hidden="true"/></summary><div><strong>{current.label}</strong><p>{current.description}</p><p>Photos, analysis, timing, and delivery are simulated. Selecting a journey moment or scenario loads an example; switching roles preserves the current review. Scenario selection resets both perspectives.</p></div></details>
+<details className={styles.context}><summary>About this demo <ChevronDown size={14} aria-hidden="true"/></summary><div><strong>{current.label}</strong><p>{current.description}</p><p>Photos, analysis, timing, and delivery are simulated. Selecting a journey moment or scenario loads an example; switching roles preserves the current review. Scenario selection resets both perspectives.</p></div></details>
 </footer>
 </div>}

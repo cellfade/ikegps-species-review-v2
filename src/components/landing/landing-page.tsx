@@ -1,14 +1,18 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Camera, ClipboardCheck, ImageIcon, MoveUpRight, Search } from "lucide-react";
+import { ArrowRight, Camera, ClipboardCheck, MoveUpRight, Search } from "lucide-react";
 import styles from "./landing-page.module.css";
 
-// Editorial IKE direction: variance 6, motion 2, density 4.
-// Image slots deliberately remain explicit until product UI is visually verified.
-function ImageSlot({ title, description, kind = "wide" }: { title: string; description: string; kind?: "wide" | "device" | "office" }) {
-  return <figure className={`${styles.imageSlot} ${styles[kind]}`}>
-    <div className={styles.slotCenter}><ImageIcon size={26} strokeWidth={1.5} aria-hidden="true" /><strong>{title}</strong><span>{description}</span></div>
-    <figcaption>Product image placeholder · Verified UI to follow</figcaption>
+// Original screenshots stay proportional and unwarped over generated environments.
+function ProductScene({ variant }: { variant: 'hero' | 'field' | 'office' | 'compliance' }) {
+  const environment = variant === 'field' ? 'dimensional' : variant === 'compliance' ? 'editorial' : 'mineral';
+  const source = variant === 'field' ? 'device' : variant === 'compliance' ? 'compliance' : 'office';
+  const label = variant === 'hero' ? 'Field capture and shared office review' : variant === 'field' ? 'IKE field capture with a possible nesting concern' : variant === 'office' ? 'Office pole review with evidence and work decisions' : 'Compliance record for the flagged pole';
+  return <figure className={`${styles.productScene} ${styles[`scene${variant}`]}`}>
+    <Image src={`/assets/${environment}-environment.png`} alt="" fill sizes="(max-width: 767px) 100vw, 1140px" className={styles.environment} priority={variant==='hero'} />
+    <a className={styles.uiPlane} href={`/assets/${source}-verified.png`} target="_blank" rel="noreferrer" aria-label={`Enlarge ${label.toLowerCase()}`}><Image src={`/assets/${source}-verified.png`} alt={label} width={source==='device'?358:1280} height={source==='device'?636:1040} sizes={variant==='hero'?'(max-width: 767px) 90vw, 820px':'(max-width: 767px) 90vw, 700px'} unoptimized priority={variant==='hero'} /></a>
+    {variant==='hero' && <a className={styles.heroDevice} href="/assets/device-verified.png" target="_blank" rel="noreferrer" aria-label="Enlarge IKE field capture"><Image src="/assets/device-verified.png" alt="IKE capture view with a flag-for-office action" width={358} height={636} sizes="(max-width: 767px) 35vw, 270px" unoptimized priority /></a>}
+    <figcaption className={styles.sceneCaption}>Actual prototype UI · Illustrative evidence <span>Open image to inspect ↗</span></figcaption>
   </figure>;
 }
 
@@ -28,7 +32,7 @@ export function LandingPage() {
           <p className={styles.lede}>Bring potential nesting concerns to the right reviewer. Get a clear work instruction back to the crew.</p>
           <a className={styles.textLink} href="#journey">Follow the finding <ArrowRight size={18} aria-hidden="true" /></a>
         </div>
-        <ImageSlot title="From field capture to office review" description="IKE device beside the shared pole review in Office Pro." />
+        <ProductScene variant="hero" />
         <div className={styles.problem}>
           <p>Photos arrive.<br /><strong>Decisions can take hours.</strong></p>
           <div><p>The opportunity is to reduce avoidable work-stoppage time between finding a concern, verifying the evidence, and returning an instruction.</p><span>A design goal to test, not a measured result.</span></div>
@@ -47,16 +51,21 @@ export function LandingPage() {
 
       <section className={`${styles.section} ${styles.journey}`} id="journey" aria-labelledby="journey-heading">
         <div className={styles.sectionIntro}><h2 id="journey-heading">One finding.<br />A connected review.</h2><p>Depth at the moments that matter. Selected touchpoints show the journey without recreating every screen in between.</p></div>
-        <div className={styles.touchpoints}>
+        <div className={styles.prototypeEmbed}>
+          <div className={styles.embedHeader}><div><h3>Your turn to make the call.</h3><p>Interactive concept · Simulated analysis and delivery</p></div><Link href="/prototype" className={styles.embedLink}>Open full view <MoveUpRight size={16} aria-hidden="true" /></Link></div>
+          <iframe src="/prototype?embed=1" title="Interactive ikeGPS prototype: field capture and office review" className={styles.prototypeFrame} loading="lazy" />
+          <div className={styles.embedFoot}><span>Switch between crew and supervisor perspectives.</span><a href="#journey-details">Continue the story <ArrowRight size={14} aria-hidden="true" /></a></div>
+        </div>
+        <div id="journey-details" className={styles.touchpoints}>
           <article className={styles.fieldTouchpoint}>
             <div className={styles.touchpointHeading}><Camera size={21} strokeWidth={1.5} aria-hidden="true" /><span>In the field</span></div>
             <h3>Capture and flag.</h3><p>Use the photos crews already collect. Surface a possible species, an existing concern, or a request for more evidence.</p>
-            <ImageSlot kind="device" title="IKE capture touchpoint" description="A minimal concern strip and the crew’s next action." />
+            <ProductScene variant="field" />
           </article>
           <article className={styles.officeTouchpoint}>
             <div className={styles.touchpointHeading}><Search size={21} strokeWidth={1.5} aria-hidden="true" /><span>In Office Pro</span></div>
             <h3>Notify. Verify. Decide.</h3><p>Open the pole’s evidence from a notification, work order, or compliance record. Correct the assessment and record hold or continue.</p>
-            <ImageSlot kind="office" title="Shared pole review" description="Evidence and AI suggestions, with the work decision at the top." />
+            <ProductScene variant="office" />
           </article>
         </div>
         <div className={styles.flow} aria-label="Example pole state flow">
@@ -68,7 +77,7 @@ export function LandingPage() {
         <p className={styles.timing}>Analysis may happen at capture, if supported, or after upload. Office review can happen hours later; sent and received remain distinct.</p>
         <article className={styles.conservation}>
           <div><ClipboardCheck size={23} strokeWidth={1.5} aria-hidden="true" /><h3>Record once.<br />Make the evidence useful.</h3><p>The compliance table gathers flagged poles and opens the same review. Selected, approved observations form the proposed Audubon handoff.</p><span>Export prepares evidence; it does not complete reporting.</span></div>
-          <ImageSlot title="Compliance and conservation output" description="Flagged records and a preview of the selected observation export." />
+          <ProductScene variant="compliance" />
         </article>
       </section>
 

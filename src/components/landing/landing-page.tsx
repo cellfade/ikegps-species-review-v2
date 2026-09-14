@@ -72,7 +72,8 @@ export function LandingPage() {
             </article>
             <article className={styles.pauseStory}>
               <div className={styles.storyCopy}><span className={styles.storyIndex}>02 / Scope of the hold</span><h3>Pause the affected pole.</h3><p>Unresolved nesting or insufficient evidence keeps this pole on hold. We assume crews can continue on other independent, available poles.</p></div>
-              <div className={styles.poleLandscape} aria-label="The hold applies to Pole 024; other poles are assessed independently"><div className={styles.poleDiagram}><div><span>Pole 023</span><i /><small>Independent work</small></div><div className={styles.heldPole}><span>Pole 024</span><i /><small>On hold</small></div><div><span>Pole 025</span><i /><small>Assess separately</small></div></div><p>One pole, not necessarily the whole work order.</p></div>
+              <Image className={styles.holdPhoto} src="/assets/hold-corridor-photo.png" alt="Illustrative utility corridor with an orange marker at one pole and neighboring poles continuing into the distance" fill sizes="(max-width: 767px) 100vw, 50vw" />
+              <div className={styles.holdPhotoCaption}><span>Pole-level hold</span><strong>One pole, not necessarily<br />the whole work order.</strong><small>Illustrative scenery · Assumption to validate</small></div>
             </article>
             <article className={styles.authorityStory}>
               <div className={styles.storyCopy}><span className={styles.storyIndex}>03 / Accountability</span><h3>Named release authority.</h3><p>The supervisor places, maintains or releases the hold and records the reason. Releasing a false alarm requires review; confirmed nesting follows the applicable procedure.</p></div>

@@ -102,7 +102,7 @@ function OfficePoleView({ openRequest = 0, mapStates = {}, onMapSelect, onMapSta
       setFeedback("");
       setReviewed(false);
       if(delivery === "Sent · Awaiting crew receipt"){setDelivery("Superseded · New evidence requires a new decision");setInstruction("hold");setConfirmedStoppage(false);setLatestReason("");}
-      setHistory(items => [`Additional evidence received · ${photoCount} photos attached · Re-review needed; work instruction unchanged`, ...items]);
+      setHistory(items => [`Additional evidence received · ${photoCount} photos attached · Re-review needed; any pending decision is superseded`, ...items]);
     }
   }
   const [observedFailureCount, setObservedFailureCount] = useState(evidenceFailureCount);

@@ -82,3 +82,114 @@ test('offline inability stays queued until explicit delivery without uploading p
   assert.equal(delivered.evidenceDelivered024,false);
   assert.equal(journeyReducer(delivered,{type:'deliver-queued-failure'}),delivered);
 });
+
+test('a received hold does not silently upload offline evidence on the next capture',()=>{
+  const first=journeyReducer(seedScene('offline'),{type:'add-photo'});
+  const instructed=journeyReducer(first,{type:'instruction-received',instruction:'hold',reason:'Keep this pole held while upload is pending'});
+  const second=journeyReducer(instructed,{type:'add-photo'});
+  assert.equal(second.localPhotoCount024,3);
+  assert.equal(second.photoCount024,0,'receipt is not evidence delivery');
+  assert.equal(second.evidenceDelivered024,false);
+  assert.equal(second.analysisReady024,false);
+  assert.equal(second.instruction,'hold');
+  assert.match(second.message,/Upload pending/);
+});
+
+test('repeated evidence requests preserve the concern and accumulate photos without clearance',()=>{
+  let current=seedScene('hold');
+  for(const reason of ['Show the crossarm from farther away','Add another view of the object']) {
+    current=journeyReducer(current,{type:'instruction-received',instruction:'request',reason});
+    assert.equal(current.scene,'request');
+    current=journeyReducer(current,{type:'add-photo'});
+    assert.equal(current.scene,'sent');
+    assert.equal(current.instruction,'hold');
+    assert.equal(current.concernId,'concern-024');
+  }
+  assert.equal(current.photoCount024,3);
+  assert.equal(current.localPhotoCount024,3);
+  const release=journeyReducer(current,{type:'instruction-received',instruction:'continue',reason:'Object verified as debris, no nesting observed'});
+  assert.equal(release.scene,'continue');
+  assert.equal(release.photoCount024,3);
+  assert.equal(release.concernId,'concern-024');
+});
+
+test('an inability followed by a successful evidence retry preserves the failure record',()=>{
+  let current=journeyReducer(seedScene('request'),{type:'unable'});
+  current=journeyReducer(current,{type:'instruction-received',instruction:'request',reason:'Try the wider view from the existing observation point'});
+  current=journeyReducer(current,{type:'add-photo'});
+  assert.equal(current.scene,'sent');
+  assert.equal(current.evidenceFailureCount024,1);
+  assert.equal(current.photoCount024,2);
+  assert.equal(current.instruction,'hold');
+});
+
+test('reset clears queued updates and stale decisions before a fresh rehearsal',()=>{
+  const queued=journeyReducer(journeyReducer(seedScene('offline'),{type:'add-photo'}),{type:'unable'});
+  const reset=journeyReducer(queued,{type:'reset'});
+  assert.equal(reset.scene,'finding');
+  assert.equal(reset.queuedEvidenceFailure024,false);
+  assert.equal(reset.evidenceFailureCount024,0);
+  assert.equal(reset.localPhotoCount024,1);
+  assert.equal(reset.photoCount024,1);
+  assert.equal(reset.message,'');
+  assert.equal(reset.instruction,'await-review');
+  assert.equal(journeyReducer(reset,{type:'deliver-queued-failure'}),reset);
+});
+
+test('scenario selection clears the previous pole decision and evidence history',()=>{
+  const released=journeyReducer(journeyReducer(seedScene('request'),{type:'add-photo'}),{type:'instruction-received',instruction:'continue',reason:'Incorrect flag verified'});
+  const clean=journeyReducer(released,{type:'scene',scene:'unflagged'});
+  assert.equal(clean.concernId,'');
+  assert.equal(clean.instruction,'await-review');
+  assert.equal(clean.message,'');
+  assert.equal(clean.photoCount024,1);
+  const offline=journeyReducer(clean,{type:'scene',scene:'offline'});
+  assert.equal(offline.concernId,'concern-024');
+  assert.equal(offline.instruction,'hold');
+  assert.equal(offline.photoCount024,0);
+  assert.equal(offline.evidenceDelivered024,false);
+});
+
+test('request receipt does not convert a pending-upload capture into delivered evidence',()=>{
+  const requested=journeyReducer(seedScene('offline'),{type:'instruction-received',instruction:'request',reason:'Add the wider view once possible'});
+  const captured=journeyReducer(requested,{type:'add-photo'});
+  assert.equal(captured.scene,'request','keep the request visible while the new photo awaits upload');
+  assert.equal(captured.photoCount,2);
+  assert.equal(captured.photoCount024,0);
+  assert.equal(captured.evidenceDelivered024,false);
+  assert.equal(captured.instruction,'hold');
+  assert.match(captured.message,/Upload pending/);
+});
+
+test('failure after an offline request receipt remains queued until explicitly delivered',()=>{
+  const requested=journeyReducer(seedScene('offline'),{type:'instruction-received',instruction:'request',reason:'Please collect an additional view'});
+  const failed=journeyReducer(requested,{type:'unable'});
+  assert.equal(failed.scene,'offline');
+  assert.equal(failed.evidenceFailureCount024,0);
+  assert.equal(failed.queuedEvidenceFailure024,true);
+  assert.equal(failed.instruction,'hold');
+  assert.match(failed.message,/office delivery pending/);
+  const delivered=journeyReducer(failed,{type:'deliver-queued-failure'});
+  assert.equal(delivered.evidenceFailureCount024,1);
+  assert.equal(delivered.queuedEvidenceFailure024,false);
+  assert.equal(delivered.photoCount024,0);
+  assert.equal(delivered.evidenceDelivered024,false);
+  assert.equal(journeyReducer(delivered,{type:'deliver-queued-failure'}),delivered);
+});
+
+test('the latest instruction remains available when photo and failure feedback changes',()=>{
+  const text='Photograph the crossarm from the current observation point';
+  const requested=journeyReducer(seedScene('offline'),{type:'instruction-received',instruction:'request',reason:`  ${text}  `});
+  assert.equal(requested.instructionReason,text);
+  const captured=journeyReducer(requested,{type:'add-photo'});
+  assert.equal(captured.instructionReason,text);
+  assert.match(captured.message,/Upload pending/);
+  const failed=journeyReducer(captured,{type:'unable'});
+  assert.equal(failed.instructionReason,text);
+  const delivered=journeyReducer(failed,{type:'deliver-queued-failure'});
+  assert.equal(delivered.instructionReason,text);
+  const revised=journeyReducer(delivered,{type:'instruction-received',instruction:'hold',reason:'Wait for the supervisor to review the available evidence'});
+  assert.equal(revised.instructionReason,'Wait for the supervisor to review the available evidence');
+  assert.equal(journeyReducer(revised,{type:'reset'}).instructionReason,'');
+  assert.equal(journeyReducer(revised,{type:'scene',scene:'request'}).instructionReason,'');
+});

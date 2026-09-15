@@ -3,7 +3,7 @@ import localFont from 'next/font/local';
 import './globals.css';
 const instrument = localFont({ src: '../../public/assets/instrument-sans.woff2', variable: '--font-instrument', display:'swap' });
 export const metadata: Metadata = {
-  metadataBase: new URL('https://ikegps-species-review-v2.vercel.app'),
+  metadataBase: new URL('https://ikegps-species-review.vercel.app'),
   title: 'IKE · Species review',
   description: 'Less waiting. Clearer decisions. Explore Andrew Miller’s field-to-office species review case study and interactive prototype.',
   openGraph: {

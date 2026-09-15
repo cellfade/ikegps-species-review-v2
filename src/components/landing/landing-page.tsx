@@ -42,8 +42,8 @@ export function LandingPage() {
 
 
       <section className={`${styles.section} ${styles.framing}`} id="framing" aria-labelledby="framing-heading">
-        <div className={styles.sectionIntro}><div><p className={styles.chapter}>01 / Problem framing</p><h2 id="framing-heading">Two core users.<br />Less time waiting.</h2></div><p>A possible nest can pause work on a pole. The crew takes the photos; the supervisor needs that evidence to decide what happens next.</p></div>
-        <p className={styles.framingLabel}>The users</p>
+        <div className={styles.sectionIntro}><div><p className={styles.chapter}>01 / Problem framing</p><h2 id="framing-heading">Work is paused.<br />A decision is needed.</h2></div><p>A possible nest can pause work on a pole. The crew takes the photos; the supervisor needs that evidence to decide what happens next.</p></div>
+        <p className={styles.framingLabel}>The users · Who needs what</p>
         <div className={styles.peopleRows}>
           <article><Image className={styles.personaImage} src="/assets/persona-field.png" alt="" width={1254} height={1254} sizes="180px" /><span>Core user</span><h3 className={styles.personaName}>Field crew</h3><h4>A clear next step at the pole.</h4><p>Capture evidence and flag uncertainty, even with poor photos or weak connectivity.</p></article>
           <article><Image className={styles.personaImage} src="/assets/persona-supervisor.png" alt="" width={1254} height={1254} sizes="180px" /><span>Core user</span><h3 className={styles.personaName}>Supervisor</h3><h4>Evidence to make and explain the call.</h4><p>Review the evidence, own the decision and return a clear work instruction.</p></article>
@@ -54,8 +54,8 @@ export function LandingPage() {
           <div><p><strong>5–20 poles</strong><span>per work order</span></p><p><strong>3–5 work orders</strong><span>on a busy crew’s day</span></p><p><strong>48 hours</strong><span>notification constraint in the scenario</span></p></div>
           <p>Brief-supplied scenario facts. Reduce avoidable review delay; preserve the required notification period.</p>
         </aside>
-        <div className={styles.designTension}><p className={styles.chapter}>The design tension</p><h3>The crew needs an answer. The supervisor needs enough evidence.</h3><p>Make it easy to request missing photos and send clear instructions back, without letting AI make the final decision.</p></div>
-        <section className={styles.anchorSection} aria-labelledby="anchors-heading"><div className={styles.anchorIntro}><h2 id="anchors-heading">Three design anchors</h2></div><div className={styles.anchorBand}><div><span>01 / AI behavior</span><h3>Uncertainty</h3><p>Reversibility &amp; latency</p></div><div><span>02 / Work decisions</span><h3>Clear ownership</h3><p>Verifiable decisions</p></div><div><span>03 / Experience</span><h3>Simplicity</h3><p>One clear next action</p></div></div></section>
+        <div className={styles.designTension}><p className={styles.chapter}>The design tension</p><h3>The crew is waiting for an answer.<br />The supervisor is waiting for evidence.</h3><p>Make it easy to request missing photos and send clear instructions back, without letting AI make the final decision.</p></div>
+        <section className={styles.anchorSection} aria-labelledby="anchors-heading"><div className={styles.anchorIntro}><h2 id="anchors-heading">Three anchors to guide the design</h2></div><div className={styles.anchorBand}><div><span>01 / AI behavior</span><h3>Uncertainty</h3><p>Reversibility &amp; latency</p></div><div><span>02 / Work decisions</span><h3>Clear ownership</h3><p>Verifiable decisions</p></div><div><span>03 / Experience</span><h3>Simplicity</h3><p>One clear next action</p></div></div></section>
       </section>
       <section className={`${styles.section} ${styles.questions}`} id="questions" aria-labelledby="questions-heading">
         <div className={styles.sectionIntro}><div><p className={styles.chapter}>02 / Questions</p><h2 id="questions-heading">Start with<br />what we don’t know.</h2></div><p>Five questions from my submitted framing, with methods to investigate them.</p></div>

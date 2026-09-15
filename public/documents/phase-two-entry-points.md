@@ -29,3 +29,19 @@ A separate conservation concept uses synthetic regional observations, with speci
 Public sharing would require a separately prepared and approved dataset: broad location, approved identification and uncertainty; exclude private utility identifiers, personal information, internal notes and exact sensitive nest coordinates. Inspect imagery for visual identifiers as well as embedded metadata. A revocable link cannot recall downloaded copies. No public sharing backend is implemented.
 
 References: [iNaturalist geoprivacy](https://www.inaturalist.org/pages/geoprivacy), [eBird Status and Trends](https://science.ebird.org/en/atlasnc/status-and-trends).
+
+## Evaluation and model escalation: rehearsal decisions
+
+These are proposed validation steps and assumptions, not measured results or implemented AI services.
+
+- **Outcome:** measure time from a flagged concern to a decision received by the crew, alongside incorrect releases. Request IKE’s current review and stoppage-duration baseline before claiming improvement.
+- **Reviewer correction rate:** record how often people change AI assessments, separating false flags from missed concerns. Disagreement alone is not accuracy; an independently checked sample is needed to establish correctness.
+- **Existing workflow baseline:** double-wood detection may reveal useful review volumes, correction patterns and delays. Its accuracy does not establish nesting-detection performance.
+- **Missed concerns:** qualified reviewers should independently inspect a sample of unflagged photos. Allow “cannot determine” for inadequate evidence, and retain normal field checks. IKE must identify who is qualified to validate these assessments.
+- **Deeper background assessment:** explore a frontier or other more capable model as a second pass, selected through measured nesting performance, latency and cost. More processing or a different model does not guarantee a correct result; models may share blind spots.
+- **Reanalysis triggers:** new evidence or an improved model may justify another pass. Repeating unchanged analysis is not an independent validation method. Record photo version, model version, analysis time and the reason for rerunning.
+- **Disagreement:** the proposed default is to route conflicting model assessments to supervisor review. Preserve prior results and the work instruction; model agreement or disagreement cannot automatically release held work. Without associated work, create a review item rather than a work hold.
+
+Before implementation, validate notification thresholds, duplicate handling, reviewer capacity, evaluation sample design and who resolves disputed assessments. Compare additional misses caught against additional false flags, review workload and processing cost.
+
+Presentation wording: “We could explore a deeper background check, while keeping human verification and measuring whether it catches additional misses.”

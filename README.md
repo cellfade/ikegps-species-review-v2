@@ -15,6 +15,6 @@ Independent design exercise with simulated AI and local state.
 
 ## Scope
 
-Demonstrates pending analysis, concern flagging, supervisor assessment, reasoned hold/continue decisions, evidence requests, explicit simulated crew receipt and CSV export. No live AI, field-device connection or external reporting. Product imagery placeholders remain on the landing page.
+Demonstrates pending analysis, concern flagging, supervisor assessment, reasoned hold/continue decisions, evidence requests, explicit simulated crew receipt and CSV export. No live AI, field-device connection or external reporting. The landing page uses generated illustrative imagery and actual prototype captures.
 
 The prototype and landing page are co-primary deliverables. Existing submitted framing materials are not part of this repository.

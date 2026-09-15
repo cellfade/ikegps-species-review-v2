@@ -42,20 +42,20 @@ export function LandingPage() {
 
 
       <section className={`${styles.section} ${styles.framing}`} id="framing" aria-labelledby="framing-heading">
-        <div className={styles.sectionIntro}><div><p className={styles.chapter}>01 / Problem framing</p><h2 id="framing-heading">One work decision.<br />Two different moments.</h2></div><p>Shorten the wait for a supervisor’s decision while the crew can still inspect the pole.</p></div>
-        <aside className={styles.briefContext} aria-label="Context supplied in the design exercise">
-          <p className={styles.chapter}>From the exercise brief</p>
-          <div><p><strong>5–20 poles</strong><span>per work order</span></p><p><strong>3–5 work orders</strong><span>on a busy crew’s day</span></p><p><strong>48 hours</strong><span>notification constraint in the scenario</span></p></div>
-          <p>Brief-supplied scenario facts. Reduce avoidable review delay; preserve the required notification period.</p>
-        </aside>
+        <div className={styles.sectionIntro}><div><p className={styles.chapter}>01 / Problem framing</p><h2 id="framing-heading">Two core users.<br />Less time waiting.</h2></div><p>Shorten the wait for a supervisor’s decision while the crew can still inspect the pole.</p></div>
         <p className={styles.framingLabel}>The users</p>
         <div className={styles.peopleRows}>
           <article><Image className={styles.personaImage} src="/assets/persona-field.png" alt="" width={1254} height={1254} sizes="180px" /><span>Core user</span><h3 className={styles.personaName}>Field crew</h3><h4>A clear next step at the pole.</h4><p>Capture evidence and flag uncertainty, even with poor photos or weak connectivity.</p></article>
           <article><Image className={styles.personaImage} src="/assets/persona-supervisor.png" alt="" width={1254} height={1254} sizes="180px" /><span>Core user</span><h3 className={styles.personaName}>Supervisor</h3><h4>Evidence to make and explain the call.</h4><p>Review the evidence, own the decision and return a clear work instruction.</p></article>
           <article><Image className={styles.personaImage} src="/assets/persona-audubon.png" alt="" width={1254} height={1254} sizes="180px" /><span>Secondary user</span><h3 className={styles.personaName}>Audubon partner</h3><h4>Usable sightings, with their context.</h4><p>Use approved observations with their context. The partner workflow is outside the core scope.</p></article>
         </div>
-        <div className={styles.designTension}><p className={styles.chapter}>The design tension</p><h3>The office owns a decision whose evidence the crew collects.</h3><p>Reduce waiting without turning uncertain AI suggestions into work clearance.</p></div>
-        <section className={styles.anchorSection} aria-labelledby="anchors-heading"><div className={styles.anchorIntro}><span>My design anchors</span><h2 id="anchors-heading">Three anchors.<br />One clear direction.</h2></div><div className={styles.anchorBand}><div><span>01 / AI behavior</span><h3>Uncertainty</h3><p>Reversibility &amp; latency</p></div><div><span>02 / Work decisions</span><h3>Clear ownership</h3><p>Verifiable decisions</p></div><div><span>03 / Experience</span><h3>Simplicity</h3><p>One clear next action</p></div></div></section>
+        <aside className={styles.briefContext} aria-label="Context supplied in the design exercise">
+          <p className={styles.chapter}>From the exercise brief</p>
+          <div><p><strong>5–20 poles</strong><span>per work order</span></p><p><strong>3–5 work orders</strong><span>on a busy crew’s day</span></p><p><strong>48 hours</strong><span>notification constraint in the scenario</span></p></div>
+          <p>Brief-supplied scenario facts. Reduce avoidable review delay; preserve the required notification period.</p>
+        </aside>
+        <div className={styles.designTension}><p className={styles.chapter}>The design tension</p><h3>The supervisor owns the decision. The field crew holds the evidence.</h3><p>The crew needs a next step; the supervisor needs enough evidence. Each handoff can extend the hold or move it toward a recorded work decision.</p></div>
+        <section className={styles.anchorSection} aria-labelledby="anchors-heading"><div className={styles.anchorIntro}><h2 id="anchors-heading">Three design anchors</h2></div><div className={styles.anchorBand}><div><span>01 / AI behavior</span><h3>Uncertainty</h3><p>Reversibility &amp; latency</p></div><div><span>02 / Work decisions</span><h3>Clear ownership</h3><p>Verifiable decisions</p></div><div><span>03 / Experience</span><h3>Simplicity</h3><p>One clear next action</p></div></div></section>
       </section>
       <section className={`${styles.section} ${styles.questions}`} id="questions" aria-labelledby="questions-heading">
         <div className={styles.sectionIntro}><div><p className={styles.chapter}>02 / Questions</p><h2 id="questions-heading">Start with<br />what we don’t know.</h2></div><p>Five questions from my submitted framing, with methods to investigate them.</p></div>
@@ -121,7 +121,7 @@ export function LandingPage() {
       </section>
       <details className={styles.scopeChoices}><summary>Scope decisions: what I chose not to build</summary><p>The core is the crew-to-supervisor decision. I excluded automatic AI clearance, mandatory field species identification, a legal rules engine and an end-to-end conservation partner workflow.</p></details>
       <section className={`${styles.section} ${styles.next}`} id="journey" aria-labelledby="journey-heading">
-        <div className={styles.sectionIntro}><div><p className={styles.chapter}>05 / Proposed solution</p><h2 id="journey-heading">Your turn<br />to make the call.</h2></div><p>Switch between crew and supervisor to follow the same concern through the selected touchpoints.</p></div>
+        <div className={styles.sectionIntro}><div><p className={styles.chapter}>05 / Proposed solution</p><h2 id="journey-heading">The proposed<br />solution.</h2></div><p>Switch between crew and supervisor to follow the same concern through the selected touchpoints.</p></div>
         <div className={styles.prototypeEmbed}>
           <div className={styles.embedHeader}><div><h3>Field capture & office review</h3><p>Interactive concept · Simulated analysis and delivery</p></div><Link href="/prototype" className={styles.embedLink}>Open full view <MoveUpRight size={16} aria-hidden="true" /></Link></div>
           <iframe src="/prototype?embed=1" title="Interactive ikeGPS prototype: field capture and office review" className={styles.prototypeFrame} loading="lazy" />

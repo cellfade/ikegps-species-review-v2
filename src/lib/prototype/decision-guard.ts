@@ -18,3 +18,10 @@ export function assessmentProblem(state: {bird: string; species: string; reason:
 export function crewDecision(instruction: "hold" | "continue" | "request", confirmedStoppage: boolean) {
   return instruction === "request" ? "request" : confirmedStoppage ? "stopped" : instruction;
 }
+
+export function shouldSupersedeDecision(delivery: string, assessmentChanged: boolean) {
+  return delivery === 'Sent · Awaiting crew receipt' && assessmentChanged;
+}
+export function nextCorridorPole(pole: string) {
+  return pole === '023' ? '024' : pole === '024' ? '025' : '023';
+}

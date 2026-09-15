@@ -23,3 +23,18 @@ The suggested 85–99% figure concerns clinical alarms. It is excluded from prod
 - Test image quality failure and retake behavior, including a crew-observed concern despite no AI flag.
 - Validate timing, interruption budget and physical target sizes on the actual device.
 - Figma needs the latest assumption cards, explicit anchor heading and feedback additions synced. Earlier editable frames remain available.
+
+## Follow-up review: presentation and evaluation
+
+The follow-up closes the dependency, quiet-state, research-findings, naming, ownership and time-pressure comments. Current source retains each of these. This review adds no measured performance claim.
+
+- **Scope:** keep Further exploration optional during the presentation. Give the active field-to-office journey most of the time; mention the additional entry points in one sentence unless asked.
+- **Numbers:** request IKE baseline review duration and independently validated detection results. Do not use clinical alarm percentages as an estimate of utility false flags or opportunity size.
+- **Baymard:** the reference library already includes interaction-cue guidance. The separate claim that classification and judgment compound error has not been verified as stated. Baymard’s AI heuristic-evaluation article concerns UX audits; it is an analogy, not validation of this nesting architecture. No new citation was added to imply otherwise.
+- **Scenario correction:** Pole 023 is clean, Pole 024 demonstrates nesting review, and Pole 025 now demonstrates a trash-bag false positive and explicit release. The supplied review’s description of Pole 025 as nest-only is out of date.
+- **Conservation:** explain that the prototype uses synthetic observations. Real data would require utility-approved, reviewed records and a prepared sharing dataset. It does not establish migration patterns.
+- **Evaluation:** see the phase-two entry-point notes for correction rate versus accuracy, review of unflagged samples, proposed deeper model passes and disagreement escalation. These remain hypotheses and validation plans.
+
+Suggested rehearsal: problem and shared dependency; clean pole briefly; flagged pole and assessment; confirm hold; correct the false positive and release; evidence and connectivity handoff; optional expansion. Keep the assessment modal central and avoid treating every screen as a required stop.
+
+Sources checked: [Baymard AI heuristic evaluations](https://baymard.com/blog/ai-heuristic-evaluations), [clinical alarm context](https://www.apsf.org/article/medical-alarms-critical-yet-challenging/).

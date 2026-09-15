@@ -31,3 +31,15 @@ test('confirmed hold still delivers an actionable evidence request', async()=>{
   assert.equal(crewDecision('hold',false),'hold');
   assert.equal(crewDecision('continue',false),'continue');
 });
+
+test('revised assessment supersedes only an unreceived decision',async()=>{
+ const {shouldSupersedeDecision}=await import('./decision-guard.ts');
+ assert.equal(shouldSupersedeDecision('Sent · Awaiting crew receipt',true),true);
+ assert.equal(shouldSupersedeDecision('Sent · Awaiting crew receipt',false),false);
+ assert.equal(shouldSupersedeDecision('Received by crew',true),false);
+ assert.equal(shouldSupersedeDecision('No new work decision sent',true),false);
+});
+test('corridor navigation visits every demonstration pole without a self-loop',async()=>{
+ const {nextCorridorPole}=await import('./decision-guard.ts');
+ assert.deepEqual(['023','024','025'].map(nextCorridorPole),['024','025','023']);
+});
